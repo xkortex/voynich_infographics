@@ -26,6 +26,11 @@ def main():
         type=Path,
         help="Also rebuild the reading edition from Voynichese XML",
     )
+    parser.add_argument(
+        "--structural-statistics",
+        action="store_true",
+        help="Also recompute the WMF character/trigram comparison",
+    )
     arguments = parser.parse_args()
     arguments.output_dir.mkdir(parents=True, exist_ok=True)
     for script in ["eva_frequencies.py", "word_positions.py", "word_lengths.py"]:
@@ -81,6 +86,17 @@ def main():
                 str(arguments.xml_dir),
                 "--font",
                 str(arguments.data_dir / "EVA2.ttf"),
+            ],
+            check=True,
+        )
+
+    if arguments.structural_statistics and not arguments.skip_png:
+        subprocess.run(
+            [
+                sys.executable,
+                str(HERE / "structural_statistics.py"),
+                "--vms",
+                str(arguments.data_dir / "transcription.txt"),
             ],
             check=True,
         )

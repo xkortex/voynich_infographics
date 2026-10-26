@@ -1,0 +1,17 @@
+{
+  "wmf_sha256": "d834e9380180d85a9ef1268abb38bca33899d635cd4495609adc83d921d2f77d",
+  "vms_sha256": "bf5b6d4ac1e3a51b1847a9c388318d609020441ccd56984c901c32b09beccafc",
+  "wmf_languages": 339,
+  "excluded_tamil_rows": 1791,
+  "max_words": 32000,
+  "max_character_units": 200000,
+  "matrix_size": 28,
+  "shuffle_seed": 20261026,
+  "sampling": "First up to max_words tokens in source order; source documents never bridged. Pair sequences capped at max_units separately per boundary/representation mode.",
+  "normalization": "WMF text field only, lowercase then NFC; Unicode letters and attached marks; other characters split tokens. VMS readable basic-EVA paragraph words, grouped by folio. Omitted VMS uncertain words close gaps between retained words.",
+  "entropy": "Plug-in H(next | previous) = -sum_ab p(ab) log2(count(ab)/outgoing(a)); spaces included by default. No bias correction. Joined view removes spaces within documents.",
+  "trigram": "Three WORD windows. Repeated occurrence coverage = sum counts >=2 / all windows. Prefix3/suffix3 map each word to first/last 3 Unicode codepoints, retaining shorter words. VMS grouped view uses identical word-string trigram mappings.",
+  "shuffle": "One within-document shuffle preserving words/frequencies; descriptive collision baseline, not a significance test.",
+  "source_paper": "https://doi.org/10.1146/annurev-linguistics-011619-030613",
+  "paper_relationship": "New WMF/ZL computation inspired by figures 4 and 6, not a reproduction of published values. Trigram experiment is separate from the paper."
+}

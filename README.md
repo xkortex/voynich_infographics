@@ -81,3 +81,7 @@ python3 src/processing/reading_text.py --xml-dir ../voynichese_enhanced_transcri
 ```
 
 Or add `--xml-dir ../voynichese_enhanced_transcription` to build_all.py. The gallery assembler keeps the reader entry when its built page exists. The reader loads text on scroll; “Load all & print” prepares the whole edition for browser printing.
+
+## Structural-statistics explorer
+
+`docs/pages/structural-statistics/` combines h₂/inventory scatter, linked side-by-side character-pair matrices, and repeated word-trigram coverage before/after first-three or last-three-character mappings. It compares ZL3b paragraph text with 339 WMF samples, with Tamil excluded. Full definitions and paper attribution: [STRUCTURAL_STATISTICS.md](src/processing/STRUCTURAL_STATISTICS.md). Only aggregate data is committed, split into small text files.

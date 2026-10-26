@@ -8,6 +8,7 @@ from pathlib import Path
 from config import ROOT, read_template
 from provenance import annotate
 from reading_text import install_gallery_entry
+from structural_statistics import install_structural_entry
 
 CHARTS = [
     (
@@ -129,6 +130,8 @@ def main():
     annotate(ROOT, artifacts_dir)
     if (site_dir / "pages/reading-text/index.html").exists():
         install_gallery_entry(site_dir)
+    if (site_dir / "pages/structural-statistics/index.html").exists():
+        install_structural_entry(site_dir)
     print("Site assembled with provenance:", site_dir)
 
 

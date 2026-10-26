@@ -71,7 +71,11 @@
     "title": "Wikipedia Multilingual Fragments",
     "local_filename": "wmf.csv",
     "rights_status": "Bundled dataset README states CC BY-SA 4.0; verify the repository record and attribution requirements before redistributing.",
-    "used_in_published_charts": false
+    "used_in_published_charts": true,
+    "used_by": [
+      "pages/structural-statistics/"
+    ],
+    "aggregate_run_manifest": "docs/pages/structural-statistics/data/methods.json"
   },
   "reading_edition": {
     "project": "https://github.com/voynichese/voynichese",

@@ -84,3 +84,7 @@ The readability refactor was checked against the original generated data: JSON v
 ## Reader generation
 
 `reading_text.py` parses the separately supplied Voynichese XML, validates counts and word indices, and emits small per-folio text files plus a source-hash manifest. It does not use the analysis cleaning or ZL3b text. `templates/reading_text.{html,css,js}` implement continuous loading, glyph rendering, folio navigation and printing. The raw XML’s original order is kept; the reader does not invent line/paragraph boundaries from image coordinates. Its license/notice is separate from both the site’s MIT code and the glyph artwork terms. See SOURCE_DATA.md for provenance and the remaining acquisition gap.
+
+## Linked structural statistics
+
+`structural_statistics.py` computes the new conditional-entropy, pair-matrix and word-trigram comparison against WMF (excluding Tamil). See [STRUCTURAL_STATISTICS.md](STRUCTURAL_STATISTICS.md) for exact definitions, sample limits, boundary handling, shuffle baseline, and paper attribution. All three interactive plots live on one page; the two character-pair views share a comparison selection. The page links back to its script, run hashes, and small derived data files.
