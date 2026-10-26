@@ -1,0 +1,76 @@
+{
+  "description": "Exact input-byte fingerprints used for the existing charts. Corpus and font files are not distributed.",
+  "inputs": [
+    {
+      "id": "zl3b",
+      "local_filename": "transcription.txt",
+      "sha256": "bf5b6d4ac1e3a51b1847a9c388318d609020441ccd56984c901c32b09beccafc",
+      "bytes": 411671,
+      "source_url": "https://voynich.nu/data/ZL3b-n.txt",
+      "retrieved_mirror": "https://raw.githubusercontent.com/Aspect-Research/voynich-autoexploration/master/data/transcriptions/eva_zl3b.txt",
+      "rights_status": "CC0, as stated by voynich.nu"
+    },
+    {
+      "id": "eva_font",
+      "local_filename": "EVA2.ttf",
+      "sha256": "80862a77e038d8d4359a4a677d340e9d97bb79772c64feb992a5ad4aaf9347e4",
+      "bytes": 55416,
+      "source_url": "https://voynich.nu/Fonts/EVA2.ttf",
+      "retrieved_mirror": null,
+      "rights_status": "Copyright Gabriel Landini; public redistribution of derived outlines requires separate review"
+    },
+    {
+      "id": "forme",
+      "local_filename": "forme_of_cury.txt",
+      "sha256": "87d1a2819214526a7410c8b864f39a217e9bf93816a26736e01e8df25447c7eb",
+      "bytes": 310681,
+      "source_url": "https://www.gutenberg.org/ebooks/8102",
+      "retrieved_mirror": null,
+      "rights_status": "Project Gutenberg marks public domain in the USA; retain/check its terms and applicable jurisdiction",
+      "download_url": "https://www.gutenberg.org/cache/epub/8102/pg8102.txt"
+    },
+    {
+      "id": "orationum",
+      "local_filename": "orationum_ocr.txt",
+      "sha256": "b13f5741608c57aaebf27984c43a9380b079b1daf45473289cedf119defed485",
+      "bytes": 855132,
+      "source_url": "https://azbyka.ru/otechnik/assets/uploads/CCSL/CCSL_160_Corpus_orationum_A-C.pdf",
+      "retrieved_mirror": null,
+      "rights_status": "User-produced Tesseract/Poppler OCR of CCSL 160; source edition/scan redistribution permission not established.",
+      "ocr_provenance": {
+        "tools": [
+          "Tesseract",
+          "Poppler"
+        ],
+        "evidence": "User identified ocr_fullres_mac.py on 2026-10-26 as the assistant-provided script used for this OCR. Copied unchanged into src/processing.",
+        "historical_script_located": true,
+        "script": "src/processing/ocr_fullres_mac.py",
+        "script_sha256": "0a2b255940e4403b920cf2c399378e322349e3cb00ea391203e8b8d0dc1cfe00",
+        "script_defaults": {
+          "dpi": 400,
+          "workers": 2,
+          "languages": "lat+fra+eng",
+          "tesseract_oem": 1,
+          "psm": 3,
+          "raster": "pdftoppm grayscale PNG",
+          "pages": "all pages",
+          "OMP_THREAD_LIMIT": "1"
+        },
+        "unknown": [
+          "PDF checksum",
+          "actual invocation/overrides",
+          "installed Poppler/Tesseract/model versions"
+        ]
+      },
+      "source_url_evidence": "User supplied original PDF URL on 2026-10-26; availability and redistribution rights have not been independently established."
+    }
+  ],
+  "wmf": {
+    "record": "https://doi.org/10.5281/zenodo.15696122",
+    "author": "Carlos Quesada",
+    "title": "Wikipedia Multilingual Fragments",
+    "local_filename": "wmf.csv",
+    "rights_status": "Bundled dataset README states CC BY-SA 4.0; verify the repository record and attribution requirements before redistributing.",
+    "used_in_published_charts": false
+  }
+}

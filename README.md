@@ -56,3 +56,9 @@ The VMS charts use Zandbergen–Landini 3b. Different cleaning rules are documen
 ## Licensing
 
 The repository’s MIT license applies to original site code. Third-party materials retain their own terms. In particular, Gabriel Landini’s EVA font-derived glyph outlines are **not** MIT-licensed; consult `docs/credits.html` and the linked source terms before reuse. The corpus text files are not included.
+
+## Processing and provenance
+
+All chart generators, the static-site assembler, and the auxiliary WMF script are in [`src/processing/`](src/processing/). Start with the [reproduction guide](src/processing/README.md), [source acquisition notes](src/processing/SOURCE_DATA.md), and [input fingerprints](src/processing/sources.json). Each chart links directly to its generator and these notes. Input corpora/font binaries are local-only and ignored by Git.
+
+Compact, reviewable [derived baseline results](results/baseline/) are tracked separately from the ignored source corpora and build intermediates.

@@ -1,0 +1,30 @@
+{
+  "Forme of Cury": {
+    "tokens": 43765,
+    "mean": 4.14516165885982,
+    "median": 4,
+    "mode": 2,
+    "sha256_normalized_text": "712a2a4b6d66bb234bcb8abe52904f9c28099b67d7e9bbadd5ff5d09fcffeb39",
+    "sha256_bytes": "87d1a2819214526a7410c8b864f39a217e9bf93816a26736e01e8df25447c7eb"
+  },
+  "Corpus orationum": {
+    "tokens": 104081,
+    "mean": 5.721466934406856,
+    "median": 6,
+    "mode": 6,
+    "sha256_normalized_text": "b13f5741608c57aaebf27984c43a9380b079b1daf45473289cedf119defed485",
+    "sha256_bytes": "b13f5741608c57aaebf27984c43a9380b079b1daf45473289cedf119defed485"
+  },
+  "VMS \u00b7 grouped EVA": {
+    "tokens": 37126,
+    "mean": 4.556698809459678,
+    "median": 5.0,
+    "mode": 5
+  },
+  "VMS \u00b7 EVA letters": {
+    "tokens": 37126,
+    "mean": 5.076388514787481,
+    "median": 5.0,
+    "mode": 5
+  }
+}
