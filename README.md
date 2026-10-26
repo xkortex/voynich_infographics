@@ -2,6 +2,13 @@
 
 A collection of standalone, interactive Voynich manuscript charts and corpus comparisons.
 
+## AI Usage Disclaimer
+
+🙋 Hi there, human here. This is, like many folks suddenly entering this space, a passion project for me. I would not have the time or mental energy to dig in as deeply as I can now without generative AI assistance. My chops are in data science and scientific research, and I've been hacking on ML since before Siraj got cancelled, so I am well aware of the limitations and hazards of GenAI. My goal here is to not use AI to come up with any conclusions or generate any graphics directly, rather I am creating scrutable tooling and pipelines with coding assistance, that process the data in a fully deterministic and reproducible way. I understand genAI usage in the broad field of scientific research is quite contentious, and particularly the genre of vibeslop Voynich "theories" is a blight on this topic. I try to review as much of the output as I can, but again, passion project. If I find something particularly juicy, rest assured I'll be pursuing the full peer-reviewed publication process. 
+
+If you see an error, hallucination, or other troubling output, please submit an Issue. I'm not accepting issues of the nature "I can't get it to run" (skill issue) or PRs unless it's something my stretched-thin attention can find value in immediately. No slop. I barely have spoons as is. 
+
+
 ## Site layout
 
 The complete static site is in `docs/`. No build step, package installation, API keys, or external runtime dependencies are required.
