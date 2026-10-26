@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Publish downloadable infographic artifacts with the static site.
+!docs/pages/*/downloads/
+!docs/pages/*/downloads/**
