@@ -1,0 +1,31 @@
+.atlas-nav {
+  box-sizing:border-box;
+  display:flex;
+  gap:16px;
+  align-items:center;
+  flex-wrap:wrap;
+  padding:12px 24px;
+  background:#203c37;
+  color:#fffdf6;
+  font:14px/1.5 system-ui,sans-serif!important;
+  max-width:none!important;
+  margin:0!important
+}
+.atlas-nav a {
+  color:#fffdf6!important;
+  text-decoration:none
+}
+.atlas-nav a:hover {
+  text-decoration:underline
+}
+.atlas-nav .atlas-links {
+  margin-left:auto;
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap
+}
+@media print {
+  .atlas-nav {
+    display:none!important
+  }
+}

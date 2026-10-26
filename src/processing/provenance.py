@@ -1,27 +1,87 @@
-"""Add source/method links to generated charts, including standalone downloads."""
-from pathlib import Path
-import json,html
-BASE='https://github.com/xkortex/voynich_infographics/blob/main/'
-CHARTS={'eva-frequencies':('eva_frequencies.py','voynich_eva_frequency'),'word-positions':('word_positions.py','voynich_eva_word_positions'),'word-lengths':('word_lengths.py','word_length_comparison')}
-def annotate(repo, artifacts):
-    site=repo/'docs'
-    shared='<a href="'+BASE+'src/processing/README.md">Reproduce these charts</a> · <a href="'+BASE+'src/processing/SOURCE_DATA.md">Source acquisition &amp; rights</a>'
-    for slug,(script,stem) in CHARTS.items():
-        block='<aside class="processing-provenance" style="padding:16px 24px;background:#e8eee4;color:#263c3a;font:14px/1.7 system-ui"><b>Trace this chart:</b> <a href="'+BASE+'src/processing/'+script+'">Processing script</a> · '+shared+' · <a href="'+BASE+'src/processing/sources.json">Input fingerprints</a> · <a href="https://github.com/xkortex/voynich_infographics/tree/main/results/baseline/">Derived data</a></aside>'
-        for path in [site/'pages'/slug/'index.html',site/'pages'/slug/'downloads'/(stem+'.html')]:
-            text=path.read_text()
-            # Idempotent even if this helper is run twice without reassembly.
-            import re
-            text=re.sub(r'<aside class="processing-provenance".*?</aside>','',text,flags=re.S)
-            end=text.rfind('</main>')
-            text=text[:end+7]+block+text[end+7:] if end>=0 else text+block
-            path.write_text(text)
-    for page in ['index.html','credits.html']:
-        path=site/page;text=path.read_text();end=text.rfind('</main>')
-        if 'class="site-provenance"' not in text:
-            text=text[:end]+'<section class="site-provenance notes"><h3>Follow the analysis</h3><p>'+shared+' · <a href="provenance.html">Methods &amp; limitations</a></p></section>'+text[end:]
-            path.write_text(text)
-    manifest=json.loads((repo/'src/processing/sources.json').read_text())
-    # Public input fingerprints, never input corpus bytes.
-    (site/'assets/input-fingerprints.json').write_text(json.dumps(manifest,indent=2)+'\n')
-    (site/'provenance.html').write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Methods &amp; provenance · Voynich infographics</title><link rel="stylesheet" href="assets/site.css"><main><a href="index.html">← All charts</a><h1>Follow the analysis.</h1><p>'+shared+'</p><h2>Chart → code → inputs</h2><ul>'+''.join('<li><a href="pages/'+slug+'/">'+slug+'</a> → <a href="'+BASE+'src/processing/'+script+'">'+script+'</a></li>' for slug,(script,_) in CHARTS.items())+'</ul><p>The input SHA-256 fingerprints are recorded in <a href="assets/input-fingerprints.json">this manifest</a>. The repository contains processing code and aggregate results, not the input corpora or font file. Rebuilding requires obtaining the inputs separately.</p><h2>Cleaning and counting</h2><p>EVA frequencies remove ambiguous bracketed spans and extended codes, retaining other readable spans. Word positions and word lengths omit entire words containing uncertain or extended material. Both grouped and letter-level EVA views are conventions, not decipherments.</p><p>Position charts use 15 equal bins of token index / (word length − 1); one-token words are placed in the middle. Word-length comparisons count repeated word occurrences. The supplied Forme edition includes editorial notes and glossary; Orationum includes front matter, apparatus and OCR noise. These are full-edition comparisons, not isolated recipes and prayers.</p><h2>Known provenance limits</h2><p>The exact Orationum OCR is fingerprinted, but the user confirms it was produced with Tesseract and Poppler using an assistant-provided script. The identified script, <a href="https://github.com/xkortex/voynich_infographics/blob/main/src/processing/ocr_fullres_mac.py">ocr_fullres_mac.py</a>, is preserved unchanged in the repository. Its defaults are 400 DPI, grayscale PNG, lat+fra+eng, OEM 1 and PSM 3; the actual invocation, installed tool versions and the PDF checksum remain unrecorded. The user identified the source PDF as <a href="https://azbyka.ru/otechnik/assets/uploads/CCSL/CCSL_160_Corpus_orationum_A-C.pdf">this CCSL 160 scan</a>. Obtaining the same book and running fresh OCR will not necessarily reproduce these counts. Its redistribution permission has not been established.</p><p>The EVA glyph artwork has separate copyright and source terms. Noncommercial use alone is not treated here as proof of permission to redistribute the font or derived outlines. See the <a href="credits.html">credits</a> and source notes. WMF is documented as an auxiliary analysis input; it has not been used in these three published charts.</p></main></html>')
+"""Attach the code → methodology → source-data trail to each static chart."""
+
+import json
+import re
+from config import read_template
+
+REPOSITORY_FILES = "https://github.com/xkortex/voynich_infographics/blob/main/"
+CHARTS = {
+    "eva-frequencies": ("eva_frequencies.py", "voynich_eva_frequency"),
+    "word-positions": ("word_positions.py", "voynich_eva_word_positions"),
+    "word-lengths": ("word_lengths.py", "word_length_comparison"),
+}
+
+
+def shared_links():
+    """Links shared by the chart trail and the site-wide methodology page."""
+    return (
+        f'<a href="{REPOSITORY_FILES}src/processing/README.md">Reproduce these charts</a> · '
+        f'<a href="{REPOSITORY_FILES}src/processing/SOURCE_DATA.md">Source acquisition &amp; rights</a>'
+    )
+
+
+def insert_chart_trail(chart_path, script_name):
+    """Replace an existing trail, so repeated assembly never duplicates it."""
+    document = chart_path.read_text()
+    document = re.sub(
+        r'<aside class="processing-provenance".*?</aside>', "", document, flags=re.S
+    )
+    trail = read_template("chart_provenance.html")
+    trail = trail.replace(
+        "SCRIPT_URL", REPOSITORY_FILES + "src/processing/" + script_name
+    )
+    trail = trail.replace("SHARED_LINKS", shared_links())
+    closing_main = document.rfind("</main>")
+    insertion = closing_main + len("</main>") if closing_main >= 0 else len(document)
+    chart_path.write_text(document[:insertion] + trail + document[insertion:])
+
+
+def insert_gallery_trail(page_path):
+    """Add a methodology link to the index or credits, once."""
+    document = page_path.read_text()
+    if 'class="site-provenance"' in document:
+        return
+    trail = (
+        '<section class="site-provenance notes"><h3>Follow the analysis</h3><p>'
+        + shared_links()
+        + ' · <a href="provenance.html">Methods &amp; limitations</a></p></section>'
+    )
+    closing_main = document.rfind("</main>")
+    page_path.write_text(document[:closing_main] + trail + document[closing_main:])
+
+
+def write_provenance_page(site_dir):
+    """Render the human-readable explanation of methods and remaining source gaps."""
+    chart_links = "".join(
+        f'<li><a href="pages/{slug}/">{slug}</a> → '
+        f'<a href="{REPOSITORY_FILES}src/processing/{script}">{script}</a></li>'
+        for slug, (script, _) in CHARTS.items()
+    )
+    document = read_template("provenance_page.html")
+    document = document.replace("SHARED_LINKS", shared_links()).replace(
+        "CHART_LINKS", chart_links
+    )
+    (site_dir / "provenance.html").write_text(document)
+
+
+def annotate(repository_dir, artifacts_dir=None):
+    """Attach trails and publish input fingerprints, never the input corpus bytes.
+
+    artifacts_dir is accepted for compatibility with existing assembly commands;
+    all provenance comes from the tracked source manifest and chart definitions.
+    """
+    site_dir = repository_dir / "docs"
+    for slug, (script_name, artifact_name) in CHARTS.items():
+        chart_dir = site_dir / "pages" / slug
+        for chart_path in [
+            chart_dir / "index.html",
+            chart_dir / "downloads" / (artifact_name + ".html"),
+        ]:
+            insert_chart_trail(chart_path, script_name)
+    for filename in ["index.html", "credits.html"]:
+        insert_gallery_trail(site_dir / filename)
+    manifest = json.loads((repository_dir / "src/processing/sources.json").read_text())
+    (site_dir / "assets/input-fingerprints.json").write_text(
+        json.dumps(manifest, indent=2) + "\n"
+    )
+    write_provenance_page(site_dir)

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Word lengths · VMS / Forme / Orationum</title>
+<style>
+{{ include:word_lengths.css }}
+</style>
+<nav id="controls" hidden>
+<label>VMS counting <select id="mode">
+<option value="grouped">Grouped EVA</option>
+<option value="letters">EVA letters</option>
+</select>
+</label>
+<label>Chart <select id="style">
+<option value="line">Line chart</option>
+<option value="bars">Grouped histogram</option>
+</select>
+</label>
+<button id="save">Download current SVG</button>
+</nav>
+<main id="chart">DEFAULT</main>
+<footer>
+<b>Interpretation:</b> This compares the supplied editions, including their commentary, rather than isolated recipe and prayer texts. OCR errors, abbreviations and mixed languages can affect Orationum’s distribution. EVA segmentation also changes lengths; use the switch to inspect both conventions. No phonetic equivalence between EVA units and Latin/English letters is assumed. The default chart remains visible without JavaScript.</footer>
+<script id="views" type="application/json">DATA</script>
+<script>
+{{ include:word_lengths.js }}
+</script>
+</html>

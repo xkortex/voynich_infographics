@@ -1,6 +1,6 @@
 # Processing and reproducibility
 
-These are the scripts that generated the three infographics, relocated from the original working directory and adapted to explicit input/output paths. The numerical cleaning and counting rules are preserved. `assemble_site.py` is the original static-site assembler with a provenance-link step added. `ocr_fullres_mac.py` is the user-identified historical OCR script, preserved unchanged.
+The generators are organized into importable functions with explicit inputs and outputs. Numerical cleaning and counting rules are preserved. Page presentation lives in readable HTML, CSS and JavaScript templates; builds embed those files so the delivered charts remain standalone. `ocr_fullres_mac.py` is the user-identified historical OCR script, preserved unchanged.
 
 ## From input to chart
 
@@ -60,3 +60,23 @@ The WMF script streams only wmf.csv when given its directory, uses the language 
 ## Limits and licensing
 
 These are operational transcription/orthography counts, not linguistic character counts or a decipherment. Full-edition comparison texts mix genres and editorial content. No corpus or font binary is bundled. The Orationum source PDF URL and original OCR script have now been identified by the user; the remaining run-level gaps are listed in SOURCE_DATA.md. The MIT license on original code does not license source corpora or third-party EVA glyph artwork. Refer to SOURCE_DATA.md and the original rights notices.
+
+## Reading and editing the code
+
+- `eva.py` defines the shared alphabet, longest-match tokenizer, and the two deliberately different uncertainty policies.
+- `eva_frequencies.py` counts symbols and converts font glyphs to paths.
+- `word_positions.py` separates position counting from SVG rendering.
+- `word_lengths.py` separates edition cleaning, statistics, CSV export, and chart rendering.
+- `templates/` contains the HTML, CSS, and browser-side JavaScript. `config.read_template()` expands local includes at build time; it adds no runtime downloads.
+- `assemble_site.py` copies chart downloads, draws the frequency preview, and builds the gallery.
+- `provenance.py` attaches the analysis trail and writes the methods page.
+- CLI modules use `main()` guards: importing them does not launch processing or parse arguments.
+
+Run focused regression tests after installing the Python dependencies:
+
+```sh
+python3 -m unittest discover -s src/processing/tests -v
+python3 src/processing/verify_outputs.py
+```
+
+The readability refactor was checked against the original generated data: JSON values match, and CSV, SVG and PNG outputs are byte-identical. HTML/CSS/JavaScript source whitespace is now formatted for reading. The original OCR script is already written in conventional functions and is kept unchanged to preserve its recorded source fingerprint.

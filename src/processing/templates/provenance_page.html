@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Methods &amp; provenance · Voynich infographics</title>
+<link rel="stylesheet" href="assets/site.css">
+<main>
+<a href="index.html">← All charts</a>
+<h1>Follow the analysis.</h1>
+<p>SHARED_LINKS</p>
+<h2>Chart → code → inputs</h2>
+<ul>CHART_LINKS</ul>
+<p>The input SHA-256 fingerprints are recorded in <a href="assets/input-fingerprints.json">this manifest</a>. The repository contains processing code and aggregate results, not the input corpora or font file. Rebuilding requires obtaining the inputs separately.</p>
+<h2>Cleaning and counting</h2>
+<p>EVA frequencies remove ambiguous bracketed spans and extended codes, retaining other readable spans. Word positions and word lengths omit entire words containing uncertain or extended material. Both grouped and letter-level EVA views are conventions, not decipherments.</p>
+<p>Position charts use 15 equal bins of token index / (word length − 1); one-token words are placed in the middle. Word-length comparisons count repeated word occurrences. The supplied Forme edition includes editorial notes and glossary; Orationum includes front matter, apparatus and OCR noise. These are full-edition comparisons, not isolated recipes and prayers.</p>
+<h2>Known provenance limits</h2>
+<p>The exact Orationum OCR is fingerprinted, but the user confirms it was produced with Tesseract and Poppler using an assistant-provided script. The identified script, <a href="https://github.com/xkortex/voynich_infographics/blob/main/src/processing/ocr_fullres_mac.py">ocr_fullres_mac.py</a>, is preserved unchanged in the repository. Its defaults are 400 DPI, grayscale PNG, lat+fra+eng, OEM 1 and PSM 3; the actual invocation, installed tool versions and the PDF checksum remain unrecorded. The user identified the source PDF as <a href="https://azbyka.ru/otechnik/assets/uploads/CCSL/CCSL_160_Corpus_orationum_A-C.pdf">this CCSL 160 scan</a>. Obtaining the same book and running fresh OCR will not necessarily reproduce these counts. Its redistribution permission has not been established.</p>
+<p>The EVA glyph artwork has separate copyright and source terms. Noncommercial use alone is not treated here as proof of permission to redistribute the font or derived outlines. See the <a href="credits.html">credits</a> and source notes. WMF is documented as an auxiliary analysis input; it has not been used in these three published charts.</p>
+</main>
+</html>

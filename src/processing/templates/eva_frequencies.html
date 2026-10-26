@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Voynich • EVA frequency atlas</title>
+<style>
+{{ include:eva_frequencies.css }}
+</style>
+<main>
+<header>
+<div class="eyebrow">Voynich manuscript / reference atlas</div>
+<h1>EVA symbol frequencies</h1>
+<p class="muted">Actual Voynich glyph shapes alongside their EVA codes. An offline reference built from the Zandbergen–Landini transliteration, version 3b (13 May 2025).</p>
+</header>
+<div class="stats">
+<div>
+<strong id="total">TOTAL</strong>
+<span id="unit">counted grouped tokens</span>
+</div>
+<div>
+<strong>LINES</strong>
+<span>transcribed text lines</span>
+</div>
+<div>
+<strong>100% offline</strong>
+<span>embedded data + vector glyphs</span>
+</div>
+</div>
+<div class="controls" id="controls" hidden>
+<label>Counting unit<select id="mode">
+<option value="groups">Grouped forms (ch, sh, ckh…)</option>
+<option value="letters">Individual EVA letters</option>
+</select>
+</label>
+<label>Order<select id="sort">
+<option value="frequency">Most frequent first</option>
+<option value="alphabet">EVA alphabetical</option>
+</select>
+</label>
+<label>Bar scale<select id="scale">
+<option value="linear">Linear</option>
+<option value="log">Logarithmic (1 + count)</option>
+</select>
+</label>
+<button id="download">Download counts (CSV)</button>
+</div>
+<p id="status" role="status">Embedded reference data · grouped forms · linear bars. Percentages use all counted tokens in the selected mode.</p>
+<noscript>
+<p>JavaScript is disabled. The complete default chart and counts remain available below.</p>
+</noscript>
+<table aria-label="EVA symbol frequency chart">
+<thead>
+<tr>
+<th>Glyph / EVA</th>
+<th>Frequency <span id="scaleLabel">(linear)</span>
+</th>
+<th class="num">Count</th>
+<th class="num">Share</th>
+</tr>
+</thead>
+<tbody id="chart">ROWS</tbody>
+</table>
+<details open>
+<summary>How to read these counts</summary>
+<p>This is a categorical frequency bar chart. EVA encodes written shapes, not known sounds. The choice of what constitutes a single manuscript character is unresolved.</p>
+<p>
+<b>Grouped forms</b> uses longest-match segmentation for cfh, ckh, cph, cth, ch and sh; every remaining EVA letter is counted individually. For example, <code>cth</code> is one token, while <code>iin</code> remains three. <b>Individual letters</b> counts c, t and h separately. A zero row means absent under that counting rule; c and h are often parts of groups.</p>
+<p>All LINES text loci are included (paragraph text, labels and other transcribed items). Headers, comments and inline angle-bracket annotations are removed. ALT ambiguous bracketed alternatives are omitted in full rather than choosing a reading. RARE extended @number; codes are excluded. Curly braces marking ligatures are removed while their contents are retained. Other punctuation and unreadable markers break sequences; no group can cross those boundaries. Case is normalized. The 25 EVA font letter codes a–v and x–z are listed, including zeros. This is a basic-EVA reference, not a catalogue of every rare or extended sign. Percentages are rounded.</p>
+<p>Fallback: the default chart is already written into this HTML. If scripting is disabled or initialization fails, it remains visible. All counts and glyph outlines are embedded; no data fetches, font downloads, chart libraries, or network connection are needed.</p>
+</details>
+<details>
+<summary>Sources, credits and reconstruction note</summary>
+<p>Transliteration: René Zandbergen and Gabriel Landini, <a href="https://voynich.nu/data/ZL3b-n.txt">ZL3b-n.txt</a> (CC0), obtained from <a href="https://github.com/Aspect-Research/voynich-autoexploration/blob/master/data/transcriptions/eva_zl3b.txt">this mirrored copy</a>. SHA-256: <code style="overflow-wrap:anywhere">HASH</code>. See <a href="https://voynich.nu/transcr.html">transliteration methodology</a>.</p>
+<p>Glyph outlines: Gabriel Landini’s EVA font, <a href="https://voynich.nu/Fonts/EVA2.ttf">2025 EVA2.ttf</a>. Connected displays use Sh, cFh, cKh, cPh and cTh. Font copyright belongs to Gabriel Landini; use this reference privately and noncommercially. See <a href="https://voynich.nu/roadmap.html">font credits and use terms</a>.</p>
+<p>The original /mnt/data/voynich_eva_frequency.html was unavailable in this session. This file is a standalone reconstruction; the original error’s precise cause could not be established.</p>
+</details>
+<footer>Prepared 25 October 2026 · No external runtime dependencies.</footer>
+</main>
+<script id="reference" type="application/json">DATA</script>
+<script id="glyphData" type="application/json">GLYPHS</script>
+<script>
+{{ include:eva_frequencies.js }}
+</script>
+</html>

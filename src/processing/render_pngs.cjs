@@ -1,7 +1,34 @@
-// SVGs remain the vector originals. PNGs are raster exports; fonts may vary by OS.
-const path=require('node:path'),fs=require('node:fs');
-const sharp=require('sharp');
-const args=process.argv.slice(2);
-if(args.length && (args.length!==2 || args[0]!=='--output-dir'))throw Error('Usage: node render_pngs.cjs [--output-dir DIR]');
-const root=args.length?path.resolve(args[1]):path.resolve(__dirname,'../../generated');
-(async()=>{for(const name of ['voynich_eva_word_positions','word_length_comparison']){await sharp(fs.readFileSync(path.join(root,name+'.svg'))).png().toFile(path.join(root,name+'.png'));console.log('Rendered '+name+'.png')}})().catch(e=>{console.error(e);process.exit(1)});
+// Rasterize the vector originals. Host fonts can affect PNG text rendering.
+const fs = require("node:fs");
+const path = require("node:path");
+const sharp = require("sharp");
+
+function outputDirectory(cliArguments) {
+  if (cliArguments.length === 0) {
+    return path.resolve(__dirname, "../../generated");
+  }
+  if (cliArguments.length !== 2 || cliArguments[0] !== "--output-dir") {
+    throw new Error("Usage: node render_pngs.cjs [--output-dir DIR]");
+  }
+  return path.resolve(cliArguments[1]);
+}
+
+async function renderCharts(directory) {
+  const chartNames = ["voynich_eva_word_positions", "word_length_comparison"];
+  for (const name of chartNames) {
+    const svg = fs.readFileSync(path.join(directory, name + ".svg"));
+    const destination = path.join(directory, name + ".png");
+    await sharp(svg).png().toFile(destination);
+    console.log("Rendered " + name + ".png");
+  }
+}
+
+async function main() {
+  const directory = outputDirectory(process.argv.slice(2));
+  await renderCharts(directory);
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

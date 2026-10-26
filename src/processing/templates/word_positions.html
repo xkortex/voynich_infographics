@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EVA word-position distributions</title>
+<style>
+{{ include:word_positions.css }}
+</style>
+<nav id="controls" hidden>
+<label>Units <select id="mode">
+<option value="groups">Grouped EVA forms</option>
+<option value="letters">Individual EVA letters</option>
+</select>
+</label>
+<label>Panel heights <select id="scale">
+<option value="own">Each symbol’s own peak</option>
+<option value="shared">Shared count scale</option>
+</select>
+</label>
+<button id="save">Download current chart (SVG)</button>
+</nav>
+<main id="chart">DEFAULT</main>
+<footer>The default uses a separate vertical scale for every symbol, like the supplied reference: compare position shapes, and use the percentages and colors to compare frequency. Switch to “Shared count scale” to compare absolute counts. All data and vector glyphs are embedded; the default chart works without JavaScript.<br>Source: <a href="https://voynich.nu/data/ZL3b-n.txt">ZL3b transcription</a> (<a href="https://github.com/Aspect-Research/voynich-autoexploration/blob/master/data/transcriptions/eva_zl3b.txt">retrieved mirror</a>) · <a href="https://voynich.nu/roadmap.html">EVA font credits and terms</a>. Cleaning differs from the earlier frequency chart by excluding entire uncertain words, so totals differ.</footer>
+<script type="application/json" id="views">DATA</script>
+<script>
+{{ include:word_positions.js }}
+</script>
+</html>

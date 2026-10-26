@@ -1,0 +1,36 @@
+body {
+  margin:0;
+  background:#e9ede7;
+  color:#263c3a;
+  font:15px system-ui
+}
+nav,footer {
+  max-width:1150px;
+  margin:auto;
+  padding:16px;
+  line-height:1.6
+}
+nav {
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap
+}
+select,button {
+  padding:8px;
+  font:inherit;
+  background:white;
+  border:1px solid #9eafa4;
+  border-radius:5px
+}
+main {
+  max-width:1200px;
+  margin:auto
+}
+main>svg {
+  width:100%;
+  height:auto;
+  display:block
+}
+nav[hidden] {
+  display:none
+}
