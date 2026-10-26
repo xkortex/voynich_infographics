@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Read the Voynich manuscript in a continuous glyph edition, with folio navigation and word links to Voynichese.">
+<title>Read the manuscript · Voynich infographics</title>
+<link rel="stylesheet" href="reader.css">
+<script src="reader.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#manuscript">Skip to manuscript</a>
+<nav class="atlas"><a href="../../index.html">← Voynich infographics</a><a href="#about">About this edition</a></nav>
+<header class="intro">
+<p class="eyebrow">A continuous reading edition</p>
+<h1>Read the manuscript.</h1>
+<p class="lede">The text, set in type. Follow the signs from folio to folio, and open any word in the manuscript viewer.</p>
+<p class="metadata">FOLIO_COUNT folios · WORD_COUNT word occurrences · Voynichese Project transcription</p>
+</header>
+<div class="toolbar" role="region" aria-label="Reading preferences">
+<label>Jump to folio <select id="folio-jump">FOLIO_OPTIONS</select></label>
+<label>Display <select id="display"><option value="glyphs">Voynich glyphs</option><option value="both">Glyphs + EVA</option><option value="eva">EVA text</option></select></label>
+<label>Size <input id="size" type="range" min="22" max="48" value="32"><output id="size-label">32</output></label>
+<button type="button" id="print">Load all &amp; print</button>
+</div>
+<p id="status" role="status">Folios load as you scroll. Hover over a word for EVA; click to inspect it in Voynichese.</p>
+<noscript><p class="notice">This reader needs JavaScript to load the per-folio text and draw glyphs. The folio links below still open the manuscript viewer.</p></noscript>
+<main id="manuscript" data-display="glyphs">FOLIO_SECTIONS</main>
+<section class="about" id="about">
+<p class="eyebrow">What you’re reading</p><h2>A reading edition, not a decipherment.</h2>
+<p>This page uses the supplied <a href="https://github.com/voynichese/voynichese">Voynichese Project</a> XML, rather than the Zandbergen–Landini transcription used in the charts. Text and order follow the XML. Original line breaks, paragraph structure, drawings, and the placement of labels are not reconstructed. Spelling differences between editions are expected.</p>
+<p>Each word opens <a href="https://www.voynichese.com/">Voynichese</a> on its folio with an exact-spelling query. Repeated copies of the same spelling are all highlighted; the viewer’s link format does not identify a unique XML word occurrence. Viewer availability is outside this site’s control.</p>
+<p>Glyph outlines are derived from Gabriel Landini’s EVA font. Connected forms use the font’s capitals (Sh, cFh, cKh, cPh, cTh). The rendering is a typographic aid, not a diplomatic reproduction. The existing <a href="../../credits.html">glyph copyright and rights caveat</a> applies.</p>
+<p>Transcription data: Copyright © 2014 The Voynichese Project, distributed here as a transformed reading edition under the XML’s Apache 2.0 notice. <a href="NOTICE.txt">Notice</a> · <a href="APACHE-2.0.txt">License</a> · <a href="source-manifest.json">Input fingerprints</a></p>
+<p><a href="https://github.com/xkortex/voynich_infographics/blob/main/src/processing/reading_text.py">Build script</a> · <a href="https://github.com/xkortex/voynich_infographics/blob/main/src/processing/templates/reading_text.js">Reader code</a> · <a href="https://github.com/xkortex/voynich_infographics/blob/main/src/processing/SOURCE_DATA.md">Source acquisition &amp; provenance</a></p>
+</section>
+<footer><a href="#">Back to top ↑</a> · <a href="../../index.html">All infographics</a></footer>
+</body></html>

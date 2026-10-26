@@ -69,3 +69,15 @@ The repository’s MIT license applies to original site code. Third-party materi
 All chart generators, the static-site assembler, and the auxiliary WMF script are in [`src/processing/`](src/processing/). Start with the [reproduction guide](src/processing/README.md), [source acquisition notes](src/processing/SOURCE_DATA.md), and [input fingerprints](src/processing/sources.json). Each chart links directly to its generator and these notes. Input corpora/font binaries are local-only and ignored by Git.
 
 Compact, reviewable [derived baseline results](results/baseline/) are tracked separately from the ignored source corpora and build intermediates.
+
+## Continuous reading edition
+
+`docs/pages/reading-text/` presents all 225 supplied Voynichese XML folios (37,886 word occurrences) in source order, with reflowed glyph text and external folio/exact-spelling links. Unlike the analysis corpus files, this **derived reading text is published** as small Apache-2.0-attributed per-folio JSON files. The original XML, images and font binary are not committed.
+
+Build it with:
+
+```sh
+python3 src/processing/reading_text.py --xml-dir ../voynichese_enhanced_transcription
+```
+
+Or add `--xml-dir ../voynichese_enhanced_transcription` to build_all.py. The gallery assembler keeps the reader entry when its built page exists. The reader loads text on scroll; “Load all & print” prepares the whole edition for browser printing.

@@ -1,0 +1,902 @@
+[
+  {
+    "folio": "f1r",
+    "words": 210
+  },
+  {
+    "folio": "f1v",
+    "words": 90
+  },
+  {
+    "folio": "f2r",
+    "words": 99
+  },
+  {
+    "folio": "f2v",
+    "words": 61
+  },
+  {
+    "folio": "f3r",
+    "words": 115
+  },
+  {
+    "folio": "f3v",
+    "words": 83
+  },
+  {
+    "folio": "f4r",
+    "words": 64
+  },
+  {
+    "folio": "f4v",
+    "words": 83
+  },
+  {
+    "folio": "f5r",
+    "words": 56
+  },
+  {
+    "folio": "f5v",
+    "words": 45
+  },
+  {
+    "folio": "f6r",
+    "words": 85
+  },
+  {
+    "folio": "f6v",
+    "words": 115
+  },
+  {
+    "folio": "f7r",
+    "words": 62
+  },
+  {
+    "folio": "f7v",
+    "words": 73
+  },
+  {
+    "folio": "f8r",
+    "words": 146
+  },
+  {
+    "folio": "f8v",
+    "words": 119
+  },
+  {
+    "folio": "f9r",
+    "words": 84
+  },
+  {
+    "folio": "f9v",
+    "words": 84
+  },
+  {
+    "folio": "f10r",
+    "words": 92
+  },
+  {
+    "folio": "f10v",
+    "words": 53
+  },
+  {
+    "folio": "f11r",
+    "words": 57
+  },
+  {
+    "folio": "f11v",
+    "words": 48
+  },
+  {
+    "folio": "f13r",
+    "words": 78
+  },
+  {
+    "folio": "f13v",
+    "words": 67
+  },
+  {
+    "folio": "f14r",
+    "words": 77
+  },
+  {
+    "folio": "f14v",
+    "words": 68
+  },
+  {
+    "folio": "f15r",
+    "words": 92
+  },
+  {
+    "folio": "f15v",
+    "words": 71
+  },
+  {
+    "folio": "f16r",
+    "words": 77
+  },
+  {
+    "folio": "f16v",
+    "words": 73
+  },
+  {
+    "folio": "f17r",
+    "words": 75
+  },
+  {
+    "folio": "f17v",
+    "words": 134
+  },
+  {
+    "folio": "f18r",
+    "words": 83
+  },
+  {
+    "folio": "f18v",
+    "words": 71
+  },
+  {
+    "folio": "f19r",
+    "words": 76
+  },
+  {
+    "folio": "f19v",
+    "words": 77
+  },
+  {
+    "folio": "f20r",
+    "words": 85
+  },
+  {
+    "folio": "f20v",
+    "words": 89
+  },
+  {
+    "folio": "f21r",
+    "words": 95
+  },
+  {
+    "folio": "f21v",
+    "words": 56
+  },
+  {
+    "folio": "f22r",
+    "words": 106
+  },
+  {
+    "folio": "f22v",
+    "words": 75
+  },
+  {
+    "folio": "f23r",
+    "words": 106
+  },
+  {
+    "folio": "f23v",
+    "words": 89
+  },
+  {
+    "folio": "f24r",
+    "words": 107
+  },
+  {
+    "folio": "f24v",
+    "words": 80
+  },
+  {
+    "folio": "f25r",
+    "words": 48
+  },
+  {
+    "folio": "f25v",
+    "words": 57
+  },
+  {
+    "folio": "f26r",
+    "words": 86
+  },
+  {
+    "folio": "f26v",
+    "words": 90
+  },
+  {
+    "folio": "f27r",
+    "words": 91
+  },
+  {
+    "folio": "f27v",
+    "words": 58
+  },
+  {
+    "folio": "f28r",
+    "words": 67
+  },
+  {
+    "folio": "f28v",
+    "words": 68
+  },
+  {
+    "folio": "f29r",
+    "words": 65
+  },
+  {
+    "folio": "f29v",
+    "words": 95
+  },
+  {
+    "folio": "f30r",
+    "words": 95
+  },
+  {
+    "folio": "f30v",
+    "words": 63
+  },
+  {
+    "folio": "f31r",
+    "words": 101
+  },
+  {
+    "folio": "f31v",
+    "words": 108
+  },
+  {
+    "folio": "f32r",
+    "words": 77
+  },
+  {
+    "folio": "f32v",
+    "words": 85
+  },
+  {
+    "folio": "f33r",
+    "words": 72
+  },
+  {
+    "folio": "f33v",
+    "words": 109
+  },
+  {
+    "folio": "f34r",
+    "words": 144
+  },
+  {
+    "folio": "f34v",
+    "words": 115
+  },
+  {
+    "folio": "f35r",
+    "words": 92
+  },
+  {
+    "folio": "f35v",
+    "words": 87
+  },
+  {
+    "folio": "f36r",
+    "words": 62
+  },
+  {
+    "folio": "f36v",
+    "words": 71
+  },
+  {
+    "folio": "f37r",
+    "words": 77
+  },
+  {
+    "folio": "f37v",
+    "words": 88
+  },
+  {
+    "folio": "f38r",
+    "words": 41
+  },
+  {
+    "folio": "f38v",
+    "words": 65
+  },
+  {
+    "folio": "f39r",
+    "words": 154
+  },
+  {
+    "folio": "f39v",
+    "words": 142
+  },
+  {
+    "folio": "f40r",
+    "words": 97
+  },
+  {
+    "folio": "f40v",
+    "words": 106
+  },
+  {
+    "folio": "f41r",
+    "words": 98
+  },
+  {
+    "folio": "f41v",
+    "words": 68
+  },
+  {
+    "folio": "f42r",
+    "words": 141
+  },
+  {
+    "folio": "f42v",
+    "words": 113
+  },
+  {
+    "folio": "f43r",
+    "words": 152
+  },
+  {
+    "folio": "f43v",
+    "words": 154
+  },
+  {
+    "folio": "f44r",
+    "words": 75
+  },
+  {
+    "folio": "f44v",
+    "words": 96
+  },
+  {
+    "folio": "f45r",
+    "words": 86
+  },
+  {
+    "folio": "f45v",
+    "words": 87
+  },
+  {
+    "folio": "f46r",
+    "words": 157
+  },
+  {
+    "folio": "f46v",
+    "words": 111
+  },
+  {
+    "folio": "f47r",
+    "words": 79
+  },
+  {
+    "folio": "f47v",
+    "words": 85
+  },
+  {
+    "folio": "f48r",
+    "words": 89
+  },
+  {
+    "folio": "f48v",
+    "words": 126
+  },
+  {
+    "folio": "f49r",
+    "words": 114
+  },
+  {
+    "folio": "f49v",
+    "words": 162
+  },
+  {
+    "folio": "f50r",
+    "words": 89
+  },
+  {
+    "folio": "f50v",
+    "words": 98
+  },
+  {
+    "folio": "f51r",
+    "words": 87
+  },
+  {
+    "folio": "f51v",
+    "words": 79
+  },
+  {
+    "folio": "f52r",
+    "words": 68
+  },
+  {
+    "folio": "f52v",
+    "words": 75
+  },
+  {
+    "folio": "f53r",
+    "words": 56
+  },
+  {
+    "folio": "f53v",
+    "words": 75
+  },
+  {
+    "folio": "f54r",
+    "words": 111
+  },
+  {
+    "folio": "f54v",
+    "words": 90
+  },
+  {
+    "folio": "f55r",
+    "words": 124
+  },
+  {
+    "folio": "f55v",
+    "words": 105
+  },
+  {
+    "folio": "f56r",
+    "words": 99
+  },
+  {
+    "folio": "f56v",
+    "words": 87
+  },
+  {
+    "folio": "f57r",
+    "words": 87
+  },
+  {
+    "folio": "f57v",
+    "words": 175
+  },
+  {
+    "folio": "f58r",
+    "words": 367
+  },
+  {
+    "folio": "f58v",
+    "words": 365
+  },
+  {
+    "folio": "f65r",
+    "words": 3
+  },
+  {
+    "folio": "f65v",
+    "words": 45
+  },
+  {
+    "folio": "f66r",
+    "words": 347
+  },
+  {
+    "folio": "f66v",
+    "words": 113
+  },
+  {
+    "folio": "f67r1",
+    "words": 155
+  },
+  {
+    "folio": "f67r2",
+    "words": 176
+  },
+  {
+    "folio": "f67v1",
+    "words": 71
+  },
+  {
+    "folio": "f67v2",
+    "words": 61
+  },
+  {
+    "folio": "f68r1",
+    "words": 65
+  },
+  {
+    "folio": "f68r2",
+    "words": 81
+  },
+  {
+    "folio": "f68r3",
+    "words": 102
+  },
+  {
+    "folio": "f68v1",
+    "words": 96
+  },
+  {
+    "folio": "f68v2",
+    "words": 100
+  },
+  {
+    "folio": "f68v3",
+    "words": 159
+  },
+  {
+    "folio": "f69r",
+    "words": 164
+  },
+  {
+    "folio": "f69v",
+    "words": 137
+  },
+  {
+    "folio": "f70r1",
+    "words": 112
+  },
+  {
+    "folio": "f70r2",
+    "words": 248
+  },
+  {
+    "folio": "f70v1",
+    "words": 86
+  },
+  {
+    "folio": "f70v2",
+    "words": 141
+  },
+  {
+    "folio": "f71r",
+    "words": 91
+  },
+  {
+    "folio": "f71v",
+    "words": 100
+  },
+  {
+    "folio": "f72r1",
+    "words": 105
+  },
+  {
+    "folio": "f72r2",
+    "words": 111
+  },
+  {
+    "folio": "f72r3",
+    "words": 169
+  },
+  {
+    "folio": "f72v1",
+    "words": 102
+  },
+  {
+    "folio": "f72v2",
+    "words": 110
+  },
+  {
+    "folio": "f72v3",
+    "words": 121
+  },
+  {
+    "folio": "f73r",
+    "words": 96
+  },
+  {
+    "folio": "f73v",
+    "words": 97
+  },
+  {
+    "folio": "f75r",
+    "words": 422
+  },
+  {
+    "folio": "f75v",
+    "words": 358
+  },
+  {
+    "folio": "f76r",
+    "words": 556
+  },
+  {
+    "folio": "f76v",
+    "words": 400
+  },
+  {
+    "folio": "f77r",
+    "words": 325
+  },
+  {
+    "folio": "f77v",
+    "words": 335
+  },
+  {
+    "folio": "f78r",
+    "words": 294
+  },
+  {
+    "folio": "f78v",
+    "words": 292
+  },
+  {
+    "folio": "f79r",
+    "words": 389
+  },
+  {
+    "folio": "f79v",
+    "words": 355
+  },
+  {
+    "folio": "f80r",
+    "words": 441
+  },
+  {
+    "folio": "f80v",
+    "words": 378
+  },
+  {
+    "folio": "f81r",
+    "words": 207
+  },
+  {
+    "folio": "f81v",
+    "words": 258
+  },
+  {
+    "folio": "f82r",
+    "words": 290
+  },
+  {
+    "folio": "f82v",
+    "words": 313
+  },
+  {
+    "folio": "f83r",
+    "words": 341
+  },
+  {
+    "folio": "f83v",
+    "words": 262
+  },
+  {
+    "folio": "f84r",
+    "words": 362
+  },
+  {
+    "folio": "f84v",
+    "words": 337
+  },
+  {
+    "folio": "f85r1",
+    "words": 333
+  },
+  {
+    "folio": "f85r2",
+    "words": 157
+  },
+  {
+    "folio": "f86v3",
+    "words": 279
+  },
+  {
+    "folio": "f86v4",
+    "words": 189
+  },
+  {
+    "folio": "f86v5",
+    "words": 381
+  },
+  {
+    "folio": "f86v6",
+    "words": 479
+  },
+  {
+    "folio": "f87r",
+    "words": 98
+  },
+  {
+    "folio": "f87v",
+    "words": 89
+  },
+  {
+    "folio": "f88r",
+    "words": 150
+  },
+  {
+    "folio": "f88v",
+    "words": 146
+  },
+  {
+    "folio": "f89r1",
+    "words": 142
+  },
+  {
+    "folio": "f89r2",
+    "words": 245
+  },
+  {
+    "folio": "f89v1",
+    "words": 159
+  },
+  {
+    "folio": "f89v2",
+    "words": 175
+  },
+  {
+    "folio": "f90r1",
+    "words": 70
+  },
+  {
+    "folio": "f90r2",
+    "words": 49
+  },
+  {
+    "folio": "f90v1",
+    "words": 96
+  },
+  {
+    "folio": "f90v2",
+    "words": 69
+  },
+  {
+    "folio": "f93r",
+    "words": 152
+  },
+  {
+    "folio": "f93v",
+    "words": 88
+  },
+  {
+    "folio": "f94r",
+    "words": 82
+  },
+  {
+    "folio": "f94v",
+    "words": 101
+  },
+  {
+    "folio": "f95r1",
+    "words": 103
+  },
+  {
+    "folio": "f95r2",
+    "words": 79
+  },
+  {
+    "folio": "f95v1",
+    "words": 117
+  },
+  {
+    "folio": "f95v2",
+    "words": 64
+  },
+  {
+    "folio": "f96r",
+    "words": 86
+  },
+  {
+    "folio": "f96v",
+    "words": 61
+  },
+  {
+    "folio": "f99r",
+    "words": 197
+  },
+  {
+    "folio": "f99v",
+    "words": 175
+  },
+  {
+    "folio": "f100r",
+    "words": 111
+  },
+  {
+    "folio": "f100v",
+    "words": 91
+  },
+  {
+    "folio": "f101r1",
+    "words": 209
+  },
+  {
+    "folio": "f101v2",
+    "words": 213
+  },
+  {
+    "folio": "f102r1",
+    "words": 109
+  },
+  {
+    "folio": "f102r2",
+    "words": 134
+  },
+  {
+    "folio": "f102v1",
+    "words": 127
+  },
+  {
+    "folio": "f102v2",
+    "words": 184
+  },
+  {
+    "folio": "f103r",
+    "words": 525
+  },
+  {
+    "folio": "f103v",
+    "words": 449
+  },
+  {
+    "folio": "f104r",
+    "words": 438
+  },
+  {
+    "folio": "f104v",
+    "words": 458
+  },
+  {
+    "folio": "f105r",
+    "words": 370
+  },
+  {
+    "folio": "f105v",
+    "words": 390
+  },
+  {
+    "folio": "f106r",
+    "words": 421
+  },
+  {
+    "folio": "f106v",
+    "words": 449
+  },
+  {
+    "folio": "f107r",
+    "words": 488
+  },
+  {
+    "folio": "f107v",
+    "words": 455
+  },
+  {
+    "folio": "f108r",
+    "words": 491
+  },
+  {
+    "folio": "f108v",
+    "words": 570
+  },
+  {
+    "folio": "f111r",
+    "words": 615
+  },
+  {
+    "folio": "f111v",
+    "words": 561
+  },
+  {
+    "folio": "f112r",
+    "words": 396
+  },
+  {
+    "folio": "f112v",
+    "words": 415
+  },
+  {
+    "folio": "f113r",
+    "words": 518
+  },
+  {
+    "folio": "f113v",
+    "words": 482
+  },
+  {
+    "folio": "f114r",
+    "words": 447
+  },
+  {
+    "folio": "f114v",
+    "words": 362
+  },
+  {
+    "folio": "f115r",
+    "words": 444
+  },
+  {
+    "folio": "f115v",
+    "words": 399
+  },
+  {
+    "folio": "f116r",
+    "words": 538
+  }
+]

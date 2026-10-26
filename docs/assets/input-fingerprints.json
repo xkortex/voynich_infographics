@@ -72,5 +72,17 @@
     "local_filename": "wmf.csv",
     "rights_status": "Bundled dataset README states CC BY-SA 4.0; verify the repository record and attribution requirements before redistributing.",
     "used_in_published_charts": false
+  },
+  "reading_edition": {
+    "project": "https://github.com/voynichese/voynichese",
+    "source_archive_url": "https://www.voynichese.com/1/data/folio/voynichese_data.zip",
+    "archive_sha256": "402d99ca8191ae53a4f25912ee0af0a7e6b6d9a3714b2beaf86404a27d5b7ad5",
+    "verified": "2026-10-26: 225 archive XML files match all user-supplied XML bytes",
+    "license": "Apache-2.0, Copyright (C) 2014 The Voynichese Project",
+    "published_derived_text": true,
+    "folio_count": 225,
+    "word_occurrences": 37886,
+    "per_xml_hash_manifest": "docs/pages/reading-text/source-manifest.json",
+    "not_the_analysis_transcription": true
   }
 }

@@ -80,3 +80,7 @@ python3 src/processing/verify_outputs.py
 ```
 
 The readability refactor was checked against the original generated data: JSON values match, and CSV, SVG and PNG outputs are byte-identical. HTML/CSS/JavaScript source whitespace is now formatted for reading. The original OCR script is already written in conventional functions and is kept unchanged to preserve its recorded source fingerprint.
+
+## Reader generation
+
+`reading_text.py` parses the separately supplied Voynichese XML, validates counts and word indices, and emits small per-folio text files plus a source-hash manifest. It does not use the analysis cleaning or ZL3b text. `templates/reading_text.{html,css,js}` implement continuous loading, glyph rendering, folio navigation and printing. The raw XML’s original order is kept; the reader does not invent line/paragraph boundaries from image coordinates. Its license/notice is separate from both the site’s MIT code and the glyph artwork terms. See SOURCE_DATA.md for provenance and the remaining acquisition gap.

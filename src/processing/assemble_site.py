@@ -7,6 +7,7 @@ import shutil
 from pathlib import Path
 from config import ROOT, read_template
 from provenance import annotate
+from reading_text import install_gallery_entry
 
 CHARTS = [
     (
@@ -126,6 +127,8 @@ def main():
     build_frequency_preview(site_dir, artifacts_dir)
     build_gallery_pages(site_dir, CHARTS)
     annotate(ROOT, artifacts_dir)
+    if (site_dir / "pages/reading-text/index.html").exists():
+        install_gallery_entry(site_dir)
     print("Site assembled with provenance:", site_dir)
 
 

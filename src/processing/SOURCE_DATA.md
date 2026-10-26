@@ -2,6 +2,8 @@
 
 Input texts and the font binary are **not hosted in this repository**. Put authorized local copies in `data/local/`, which is ignored by Git, or use `--data-dir /another/private/folder`. `sources.json` records the exact original file-byte SHA-256 hashes and sizes, not the texts themselves. File hashes identify bytes; they do not prove a license or source chain.
 
+The reading edition is a separate exception: its small Apache-attributed derived per-folio text files are published for continuous reading; see section 6.
+
 ## 1. Zandbergen–Landini VMS transliteration
 
 - Primary documentation: https://voynich.nu/transcr.html
@@ -60,3 +62,11 @@ python3 src/processing/check_sources.py --data-dir data/local
 ```
 
 The helper fetches only the public VMS text and Gutenberg text; it does not fetch a font, Orationum, or WMF. It preserves existing inputs and prints a warning for bytes that differ from the original hashes. A failure is reported rather than silently switching sources. Upstream content and line endings can change; keep the printed hashes with your analysis.
+
+## 6. Voynichese reading edition XML
+
+The user supplied `voynichese_enhanced_transcription/` (225 XML folios). Every input file carries “Copyright (C) 2014 The Voynichese Project” and an Apache License 2.0 notice. The new reading page publishes a transformed edition with attribution and the license; it is a deliberate exception to the analysis workflow’s local-only text policy. No original XML or image geometry is committed.
+
+Project: https://github.com/voynichese/voynichese . Transcription credits: https://github.com/voynichese/voynichese/blob/wiki/CreditsAndCopyright.md (including Takeshi Takahashi and Jorge Stolfi). The project documents its Apache-2.0 enhanced transcription download at https://www.voynichese.com/1/data/folio/voynichese_data.zip (see https://github.com/voynichese/voynichese/blob/wiki/DataSets.md). On 26 October 2026 all 225 XML files in that archive were verified byte-for-byte against the supplied local files. The archive SHA-256 was `402d99ca8191ae53a4f25912ee0af0a7e6b6d9a3714b2beaf86404a27d5b7ad5`. Compare file hashes in `docs/pages/reading-text/source-manifest.json` to identify this exact edition.
+
+Word links use the live viewer’s `#/FOLIO/exa:EVA` fragment syntax, verified against its parser and a live f1r/fachys link on 26 October 2026. The final numeric fragment means page scroll offset, not the XML word index. The query selects all exact-spelling matches on a folio, not a unique occurrence.

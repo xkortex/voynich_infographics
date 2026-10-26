@@ -21,6 +21,11 @@ def main():
         action="store_true",
         help="Generate HTML/SVG/data only; do not assemble docs/",
     )
+    parser.add_argument(
+        "--xml-dir",
+        type=Path,
+        help="Also rebuild the reading edition from Voynichese XML",
+    )
     arguments = parser.parse_args()
     arguments.output_dir.mkdir(parents=True, exist_ok=True)
     for script in ["eva_frequencies.py", "word_positions.py", "word_lengths.py"]:
@@ -63,6 +68,19 @@ def main():
                 str(HERE / "assemble_site.py"),
                 "--artifacts",
                 str(arguments.output_dir),
+            ],
+            check=True,
+        )
+
+    if arguments.xml_dir and not arguments.skip_png:
+        subprocess.run(
+            [
+                sys.executable,
+                str(HERE / "reading_text.py"),
+                "--xml-dir",
+                str(arguments.xml_dir),
+                "--font",
+                str(arguments.data_dir / "EVA2.ttf"),
             ],
             check=True,
         )

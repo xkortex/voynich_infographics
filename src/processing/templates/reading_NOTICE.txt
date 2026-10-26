@@ -1,0 +1,22 @@
+Voynichese Project reading edition
+Copyright (C) 2014 The Voynichese Project
+
+The per-folio word transcription is derived from the user-supplied
+voynichese_enhanced_transcription XML collection. Each input XML carries
+an Apache License, Version 2.0 notice. A copy of that license is provided
+in APACHE-2.0.txt. Original project: https://github.com/voynichese/voynichese
+Source archive: https://www.voynichese.com/1/data/folio/voynichese_data.zip
+Dataset documentation: https://github.com/voynichese/voynichese/blob/wiki/DataSets.md
+
+This derivative keeps the XML text, document order, and word indices,
+removes image geometry, and presents the words as reflowable folios.
+It is not the Zandbergen–Landini transcription used by the charts.
+Transcription contributors are credited by the project, including
+Takeshi Takahashi and Jorge Stolfi:
+https://github.com/voynichese/voynichese/blob/wiki/CreditsAndCopyright.md
+
+The glyph artwork is separate from the Apache-licensed XML data:
+Gabriel Landini's EVA2 font-derived outlines, with source terms and
+unresolved public redistribution caveats described at ../../credits.html.
+Neither Apache-2.0 nor the site's MIT code license grants extra glyph rights.
+No font binary or manuscript scan is included.
