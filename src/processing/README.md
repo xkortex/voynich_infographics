@@ -77,6 +77,8 @@ Run focused regression tests after installing the Python dependencies:
 ```sh
 python3 -m unittest discover -s src/processing/tests -v
 python3 src/processing/verify_outputs.py
+npm --prefix src/processing ci
+npm --prefix src/processing run test:reader
 ```
 
 The readability refactor was checked against the original generated data: JSON values match, and CSV, SVG and PNG outputs are byte-identical. HTML/CSS/JavaScript source whitespace is now formatted for reading. The original OCR script is already written in conventional functions and is kept unchanged to preserve its recorded source fingerprint.
@@ -84,6 +86,10 @@ The readability refactor was checked against the original generated data: JSON v
 ## Reader generation
 
 `reading_text.py` parses the separately supplied Voynichese XML, validates counts and word indices, and emits small per-folio text files plus a source-hash manifest. It does not use the analysis cleaning or ZL3b text. `templates/reading_text.{html,css,js}` implement continuous loading, glyph rendering, folio navigation and printing. The raw XML’s original order is kept; the reader does not invent line/paragraph boundaries from image coordinates. Its license/notice is separate from both the site’s MIT code and the glyph artwork terms. See SOURCE_DATA.md for provenance and the remaining acquisition gap.
+
+The reader supports shareable folio fragments (`#f111r`) and exact local word fragments (`#f1r-word-0`, using the XML word index). Navigation waits for the destination and keeps it aligned while preceding folios load; manual scrolling releases that alignment. Browser back/forward restores previous destinations.
+
+EVA search reads the same per-folio JSON files, including folios not yet displayed. It supports case-insensitive substring or whole-word/phrase matching, context links, highlights, and previous/next results. Phrases never cross folio boundaries. The browser regression suite exercises delayed loading, competing jumps, word fragments, history, and search without requiring the source corpora.
 
 ## Linked structural statistics
 

@@ -129,6 +129,8 @@ def build_reader(xml_dir, font_path, site_dir):
     )
     page = read_template("reading_text.html")
     for key, value in {
+        "READER_STYLE_VERSION": hashlib.sha256((TEMPLATE_DIR / "reading_text.css").read_bytes()).hexdigest()[:12],
+        "READER_SCRIPT_VERSION": hashlib.sha256((TEMPLATE_DIR / "reading_text.js").read_bytes()).hexdigest()[:12],
         "FOLIO_OPTIONS": options,
         "FOLIO_SECTIONS": sections,
         "FOLIO_COUNT": str(len(folios)),

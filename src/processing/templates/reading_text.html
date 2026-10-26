@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Read the Voynich manuscript in a continuous glyph edition, with folio navigation and word links to Voynichese.">
 <title>Read the manuscript · Voynich infographics</title>
-<link rel="stylesheet" href="reader.css">
-<script src="reader.js" defer></script>
+<link rel="stylesheet" href="reader.css?v=READER_STYLE_VERSION">
+<script src="reader.js?v=READER_SCRIPT_VERSION" defer></script>
 </head>
 <body>
 <a class="skip" href="#manuscript">Skip to manuscript</a>
@@ -22,9 +22,16 @@
 <label>Display <select id="display"><option value="glyphs">Voynich glyphs</option><option value="both">Glyphs + EVA</option><option value="eva">EVA text</option></select></label>
 <label>Size <input id="size" type="range" min="22" max="48" value="32"><output id="size-label">32</output></label>
 <button type="button" id="print">Load all &amp; print</button>
+<form id="eva-search" class="search-form" role="search" aria-label="Search the EVA transcription">
+<label for="eva-query">Search EVA</label><input id="eva-query" type="search" placeholder="daiin or shol shory" autocomplete="off" spellcheck="false">
+<select id="search-mode" aria-label="Search matching"><option value="contains">Contains text</option><option value="words">Whole words / phrase</option></select>
+<button type="submit">Find</button><button type="button" id="clear-search">Clear</button>
+<button type="button" id="previous-match" disabled aria-label="Previous search match">← Match</button><span id="match-position" aria-live="polite"></span><button type="button" id="next-match" disabled aria-label="Next search match">Match →</button>
+</form>
 </div>
-<p id="status" role="status">Folios load as you scroll. Hover over a word for EVA; click to inspect it in Voynichese.</p>
+<p id="status" role="status">Folio jumps stay anchored while nearby text loads. Folios load as you scroll. Hover over a word for EVA; click to inspect it in Voynichese.</p>
 <noscript><p class="notice">This reader needs JavaScript to load the per-folio text and draw glyphs. The folio links below still open the manuscript viewer.</p></noscript>
+<section class="search-results-panel" aria-label="EVA search results"><p id="search-status" role="status">Search words or phrases across all folios. Text is fetched without rendering the entire manuscript.</p><ol id="search-results"></ol><button type="button" id="more-matches" hidden>Show more results</button></section>
 <main id="manuscript" data-display="glyphs">FOLIO_SECTIONS</main>
 <section class="about" id="about">
 <p class="eyebrow">What you’re reading</p><h2>A reading edition, not a decipherment.</h2>
