@@ -9,6 +9,7 @@ from config import ROOT, read_template
 from provenance import annotate
 from reading_text import install_gallery_entry
 from structural_statistics import install_structural_entry
+from word_frequencies import install_frequency_entry
 
 CHARTS = [
     (
@@ -132,6 +133,8 @@ def main():
         install_gallery_entry(site_dir)
     if (site_dir / "pages/structural-statistics/index.html").exists():
         install_structural_entry(site_dir)
+    if (site_dir / "pages/word-frequencies/index.html").exists():
+        install_frequency_entry(site_dir)
     print("Site assembled with provenance:", site_dir)
 
 

@@ -70,3 +70,7 @@ The user supplied `voynichese_enhanced_transcription/` (225 XML folios). Every i
 Project: https://github.com/voynichese/voynichese . Transcription credits: https://github.com/voynichese/voynichese/blob/wiki/CreditsAndCopyright.md (including Takeshi Takahashi and Jorge Stolfi). The project documents its Apache-2.0 enhanced transcription download at https://www.voynichese.com/1/data/folio/voynichese_data.zip (see https://github.com/voynichese/voynichese/blob/wiki/DataSets.md). On 26 October 2026 all 225 XML files in that archive were verified byte-for-byte against the supplied local files. The archive SHA-256 was `402d99ca8191ae53a4f25912ee0af0a7e6b6d9a3714b2beaf86404a27d5b7ad5`. Compare file hashes in `docs/pages/reading-text/source-manifest.json` to identify this exact edition.
 
 Word links use the live viewer’s `#/FOLIO/exa:EVA` fragment syntax, verified against its parser and a live f1r/fachys link on 26 October 2026. The final numeric fragment means page scroll offset, not the XML word index. The query selects all exact-spelling matches on a folio, not a unique occurrence.
+
+## Word frequency comparison inputs
+
+The additional IT2a, VT0e and RF1b basic-EVA inputs are acquired directly from Voynich.nu and kept local. ZL3b is the same resource used by the earlier charts. See [WORD_FREQUENCIES.md](WORD_FREQUENCIES.md) for exact acquisition URLs, related-source limitations and raw/derived separation; the published page includes SHA-256 fingerprints for every input.

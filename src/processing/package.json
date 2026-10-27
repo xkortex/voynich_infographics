@@ -8,6 +8,7 @@
     "jsdom": "30.1.3"
   },
   "scripts": {
-    "test:reader": "node --test tests/reading_text.test.cjs"
+    "test:reader": "node --test tests/reading_text.test.cjs",
+    "test:frequencies": "node --test tests/word_frequencies.test.cjs"
   }
 }

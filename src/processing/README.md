@@ -94,3 +94,7 @@ EVA search reads the same per-folio JSON files, including folios not yet display
 ## Linked structural statistics
 
 `structural_statistics.py` computes the new conditional-entropy, pair-matrix and word-trigram comparison against WMF (excluding Tamil). See [STRUCTURAL_STATISTICS.md](STRUCTURAL_STATISTICS.md) for exact definitions, sample limits, boundary handling, shuffle baseline, and paper attribution. All three interactive plots live on one page; the two character-pair views share a comparison selection. The page links back to its script, run hashes, and small derived data files.
+
+## Word frequency transformations
+
+[`word_frequencies.py`](word_frequencies.py) builds the four-source EVA rank curves, exact frequency-of-frequencies histograms, and inspectable family tables. See [WORD_FREQUENCIES.md](WORD_FREQUENCIES.md) for acquisition, population rules, fourteen transformations, denominators and reproduction. The page loads only local text assets.

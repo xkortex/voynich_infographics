@@ -85,3 +85,7 @@ Or add `--xml-dir ../voynichese_enhanced_transcription` to build_all.py. The gal
 ## Structural-statistics explorer
 
 `docs/pages/structural-statistics/` combines h₂/inventory scatter, linked side-by-side character-pair matrices, and repeated word-trigram coverage before/after first-three or last-three-character mappings. It compares ZL3b paragraph text with 339 WMF samples, with Tamil excluded. Full definitions and paper attribution: [STRUCTURAL_STATISTICS.md](src/processing/STRUCTURAL_STATISTICS.md). Only aggregate data is committed, split into small text files.
+
+## Word frequency sensitivity
+
+The [word frequency explorer](https://xkortex.github.io/voynich_infographics/pages/word-frequencies/) compares four EVA-based resources under fourteen transformations, with count/relative views and links from family members to Voynichese. [Reproduction and definitions](src/processing/WORD_FREQUENCIES.md) explain the parsing, learned-family heuristic, edit-distance rule and source limitations.

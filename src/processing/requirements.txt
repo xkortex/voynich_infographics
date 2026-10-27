@@ -1,1 +1,2 @@
 fonttools==4.67.0
+morfessor==2.0.6
