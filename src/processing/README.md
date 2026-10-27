@@ -47,6 +47,10 @@ Remove angle annotations; split words at periods, commas, whitespace, hyphens an
 
 Position = token index / (token count − 1), binned into 15 intervals. Single-token words go in the middle. Repeated words count repeatedly. Own-peak scaling compares shape, while shared scaling compares absolute bin counts; color expresses overall token share. Small word lengths create discrete positional spikes, so these curves are not smoothed estimates of a continuous process.
 
+The position page can sort alphabetically or by descending total frequency (alphabetical ties), and switch between separate panels and stacked ridgelines. Ridge spacing changes visual overlap only; the underlying 15-bin counts and scaling remain unchanged. Opaque underlays can obscure the preceding ridge, so use separate panels for unobstructed comparison.
+
+The SVG and PNG buttons, including the gallery navigation links, export a snapshot of the current units, scale, order, layout and ridge spacing. PNG is rasterized in the browser from the same embedded SVG at up to 2× resolution, with a 16-million-pixel limit and explicit error feedback. It needs no font downloads or external image assets. Static PNG/SVG files remain default-view fallbacks when JavaScript is unavailable; they are not the interactive export source. The standalone HTML has the same controls. Run `npm --prefix src/processing run test:positions` for renderer/export regressions.
+
 For the comparison editions, remove Gutenberg wrapper, PDF page markers and standalone Google digitization lines; join letter-hyphen-newline-letter wraps; normalize NFC. Tokenize Unicode alphabetic-like runs with optional internal apostrophes; only alphabetic characters add length. Keep editorial content, abbreviations and OCR noise. Expected counts: **43,765 Forme words**, mean **4.1451616589**; **104,081 Orationum words**, mean **5.7214669344**. CSV preserves exact lengths; chart tail is 25+. VMS grouped mean is **4.5566988095**, letter mean **5.0763885148**.
 
 ### WMF

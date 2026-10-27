@@ -17,11 +17,16 @@
 <option value="shared">Shared count scale</option>
 </select>
 </label>
-<button id="save">Download current chart (SVG)</button>
+<label>Order <select id="order"><option value="alphabetical">Alphabetical</option><option value="frequency">Most frequent first</option></select></label>
+<label>Layout <select id="layout"><option value="panels">Separate panels</option><option value="ridges">Stacked ridgelines</option></select></label>
+<label id="spacing-control" hidden>Ridge spacing <input id="spacing" type="range" min="30" max="90" value="52" step="2"><output id="spacing-value" for="spacing">52 px</output></label>
+<button id="save">Download current SVG</button>
+<button id="save-png">Download current PNG</button>
+<span id="export-status" role="status" aria-live="polite"></span>
 </nav>
 <main id="chart">DEFAULT</main>
-<footer>The default uses a separate vertical scale for every symbol, like the supplied reference: compare position shapes, and use the percentages and colors to compare frequency. Switch to “Shared count scale” to compare absolute counts. All data and vector glyphs are embedded; the default chart works without JavaScript.<br>Source: <a href="https://voynich.nu/data/ZL3b-n.txt">ZL3b transcription</a> (<a href="https://github.com/Aspect-Research/voynich-autoexploration/blob/master/data/transcriptions/eva_zl3b.txt">retrieved mirror</a>) · <a href="https://voynich.nu/roadmap.html">EVA font credits and terms</a>. Cleaning differs from the earlier frequency chart by excluding entire uncertain words, so totals differ.</footer>
-<script type="application/json" id="views">DATA</script>
+<footer>The default uses a separate vertical scale for every symbol, like the supplied reference: compare position shapes, and use the percentages and colors to compare frequency. Switch to “Shared count scale” to compare absolute counts. Sort alphabetically or by descending frequency. The ridgeline layout uses opaque overlapping areas; reduce ridge spacing for more overlap. Both download buttons capture the current units, scale, order, layout and spacing. PNG exports use up to 2× resolution. All data and vector glyphs are embedded; the default chart works without JavaScript.<br>Source: <a href="https://voynich.nu/data/ZL3b-n.txt">ZL3b transcription</a> (<a href="https://github.com/Aspect-Research/voynich-autoexploration/blob/master/data/transcriptions/eva_zl3b.txt">retrieved mirror</a>) · <a href="https://voynich.nu/roadmap.html">EVA font credits and terms</a>. Cleaning differs from the earlier frequency chart by excluding entire uncertain words, so totals differ.</footer>
+<script type="application/json" id="position-data">DATA</script>
 <script>
 {{ include:word_positions.js }}
 </script>

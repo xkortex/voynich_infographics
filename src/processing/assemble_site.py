@@ -24,7 +24,7 @@ CHARTS = [
         "word-positions",
         "Where symbols occur within words",
         "Beginning, middle, or end?",
-        "Small area charts reveal each sign’s positional profile. Compare grouped forms or individual EVA letters on independent or shared scales.",
+        "Compare each sign’s positional profile in panels or stacked ridgelines. Sort alphabetically or by frequency, change units and scales, and export the current view.",
         "voynich_eva_word_positions",
         "voynich_eva_word_positions.png",
     ),
@@ -54,7 +54,13 @@ def copy_chart_pages(site_dir, artifacts_dir, charts, navigation_style):
             artifact_path = artifacts_dir / (artifact_name + "." + ext)
             if artifact_path.exists():
                 shutil.copy2(artifact_path, downloads_dir / artifact_path.name)
-                nav += f'<a href="downloads/{artifact_path.name}" download>{ext.upper()} ↓</a>'
+                current = (
+                    f' data-current-export="{ext}"'
+                    if slug == "word-positions" and ext in {"png", "svg"}
+                    else ""
+                )
+                label = "Current " + ext.upper() if current else ext.upper()
+                nav += f'<a href="downloads/{artifact_path.name}" download{current}>{label} ↓</a>'
         nav += "</span></nav>"
         # Position/length charts put controls before <main>; frequency controls
         # are inside <main>. Insert the site navigation above either layout.

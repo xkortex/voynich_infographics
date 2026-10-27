@@ -168,8 +168,9 @@ def main():
         statistics[mode]["hist"] = dict(histograms)
     (output_dir / "voynich_eva_word_positions.svg").write_text(views["groups"]["own"])
     page = read_template("word_positions.html")
+    payload = {"statistics": statistics, "glyphs": glyphs, "word_count": len(words)}
     page = page.replace("DEFAULT", views["groups"]["own"]).replace(
-        "DATA", json.dumps(views)
+        "DATA", json.dumps(payload)
     )
     (output_dir / "voynich_eva_word_positions.html").write_text(page)
     (output_dir / "positions.json").write_text(json.dumps(statistics))

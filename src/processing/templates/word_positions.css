@@ -49,3 +49,8 @@ a {
     display:none
   }
 }
+
+[hidden] { display:none !important; }
+#spacing-control { flex-wrap:wrap; }
+#spacing-value { min-width:45px; font-size:13px; }
+#export-status { font-size:13px; }
