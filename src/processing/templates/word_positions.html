@@ -7,7 +7,8 @@
 {{ include:word_positions.css }}
 </style>
 <nav id="controls" hidden>
-<label>Units <select id="mode">
+<label>Corpus <select id="corpus"><option value="vms">Voynich · ZL3b</option><option value="forme">English · Forme of Cury</option><option value="orationum">Latin · Corpus orationum</option></select></label>
+<label id="units-control">Units <select id="mode">
 <option value="groups">Grouped EVA forms</option>
 <option value="letters">Individual EVA letters</option>
 </select>
@@ -25,7 +26,7 @@
 <span id="export-status" role="status" aria-live="polite"></span>
 </nav>
 <main id="chart">DEFAULT</main>
-<footer>The default uses a separate vertical scale for every symbol, like the supplied reference: compare position shapes, and use the percentages and colors to compare frequency. Switch to “Shared count scale” to compare absolute counts. Sort alphabetically or by descending frequency. The ridgeline layout uses opaque overlapping areas; reduce ridge spacing for more overlap. Both download buttons capture the current units, scale, order, layout and spacing. PNG exports use up to 2× resolution. All data and vector glyphs are embedded; the default chart works without JavaScript.<br>Source: <a href="https://voynich.nu/data/ZL3b-n.txt">ZL3b transcription</a> (<a href="https://github.com/Aspect-Research/voynich-autoexploration/blob/master/data/transcriptions/eva_zl3b.txt">retrieved mirror</a>) · <a href="https://voynich.nu/roadmap.html">EVA font credits and terms</a>. Cleaning differs from the earlier frequency chart by excluding entire uncertain words, so totals differ.</footer>
+<footer>The default uses a separate vertical scale for every symbol, like the supplied reference: compare position shapes, and use the percentages and colors to compare frequency. Switch to “Shared count scale” to compare absolute counts. Sort alphabetically or by descending frequency. The ridgeline layout uses opaque overlapping areas; reduce ridge spacing for more overlap. Both download buttons capture the current units, scale, order, layout and spacing. PNG exports use up to 2× resolution. For Forme and Orationum, the full editions use the same word extraction as the word-length chart. Editorial material and Latin OCR noise remain. Letter case is folded; accents, ligatures and historical letters are retained; apostrophes are excluded from letter positions. EVA grouping applies only to Voynich. All data and vector glyphs are embedded; the default chart works without JavaScript.<br>Source: <a href="https://voynich.nu/data/ZL3b-n.txt">ZL3b transcription</a> (<a href="https://github.com/Aspect-Research/voynich-autoexploration/blob/master/data/transcriptions/eva_zl3b.txt">retrieved mirror</a>) · <a href="https://voynich.nu/roadmap.html">EVA font credits and terms</a>. Voynich cleaning differs from the earlier frequency chart by excluding entire uncertain words, so totals differ. Comparison sources: <a href="https://www.gutenberg.org/cache/epub/8102/pg8102.txt">Forme of Cury (Gutenberg)</a> · <a href="https://azbyka.ru/otechnik/assets/uploads/CCSL/CCSL_160_Corpus_orationum_A-C.pdf">Corpus orationum scan</a> (local Tesseract/Poppler OCR). Input-byte hashes for all three corpora are embedded in the chart data.</footer>
 <script type="application/json" id="position-data">DATA</script>
 <script>
 {{ include:word_positions.js }}

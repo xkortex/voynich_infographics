@@ -1,11 +1,13 @@
 """Count within-word positions and render the position-distribution charts."""
 
 import html
+import hashlib
 import json
 import math
 import re
 from collections import Counter, defaultdict
 from config import paths, read_template
+from word_lengths import edition_words
 from eva import LETTERS, GROUPED_FORMS, readable_words, tokenize
 
 BIN_COUNT = 15
@@ -144,6 +146,37 @@ def render_position_chart(mode, counts, histograms, glyphs, word_count, shared=F
     return "".join(svg_parts) + "</svg>"
 
 
+def edition_positions(text, remove_gutenberg_wrapper=False):
+    """Use the length chart’s full-edition words; apostrophes are not letters.
+
+    Lowercase NFC Unicode letters are retained, including accents, thorn and
+    ligatures. There is no modern spelling, u/v, i/j or ligature normalization.
+    """
+    words = [
+        "".join(c for c in word.lower() if c.isalpha())
+        for word in edition_words(text, remove_gutenberg_wrapper)
+    ]
+    counts = Counter()
+    histograms = defaultdict(lambda: [0] * BIN_COUNT)
+    for word in words:
+        for index, character in enumerate(word):
+            position = index / (len(word) - 1) if len(word) > 1 else 0.5
+            histograms[character][min(BIN_COUNT - 1, int(position * BIN_COUNT))] += 1
+            counts[character] += 1
+    for character in "abcdefghijklmnopqrstuvwxyz":
+        histograms[character]  # Keep zero-frequency alphabet entries visible.
+    return {
+        "word_count": len(words),
+        "statistics": {
+            "letters": {
+                "total": sum(counts.values()),
+                "counts": dict(counts),
+                "hist": dict(histograms),
+            }
+        },
+    }
+
+
 def main():
     data_dir, output_dir = paths(__doc__)
     words = readable_words((data_dir / "transcription.txt").read_text())
@@ -169,6 +202,39 @@ def main():
     (output_dir / "voynich_eva_word_positions.svg").write_text(views["groups"]["own"])
     page = read_template("word_positions.html")
     payload = {"statistics": statistics, "glyphs": glyphs, "word_count": len(words)}
+    corpora = {
+        "vms": {
+            "label": "Voynich · ZL3b",
+            "heading": "Where EVA symbols occur within words",
+            "source": "Zandbergen–Landini 3b",
+            "word_count": len(words),
+            "statistics": statistics,
+            "method": "Uncertain words are omitted in full. Grouped forms: cfh, ckh, cph, cth, ch, sh use longest match.",
+            "credit": "Data: Zandbergen & Landini, ZL3b-n.txt (CC0). Glyph outlines: Gabriel Landini, EVA2.ttf (2025).",
+        }
+    }
+    for code, label, filename in [
+        ("forme", "English · Forme of Cury", "forme_of_cury.txt"),
+        ("orationum", "Latin · Corpus orationum", "orationum_ocr.txt"),
+    ]:
+        path = data_dir / filename
+        corpora[code] = {
+            **edition_positions(path.read_text(), code == "forme"),
+            "label": label,
+            "heading": "Where letters occur within words",
+            "source": "Forme of Cury" if code == "forme" else "Corpus orationum · OCR",
+            "sha256_bytes": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "method": "Full edition: editorial material retained; letter case folded; accents and historical letters retained.",
+            "credit": (
+                "Forme of Cury: Project Gutenberg 8102."
+                if code == "forme"
+                else "Corpus orationum: CCSL 160, user Tesseract/Poppler OCR; includes OCR errors and editorial material."
+            ),
+        }
+    corpora["vms"]["sha256_bytes"] = hashlib.sha256(
+        (data_dir / "transcription.txt").read_bytes()
+    ).hexdigest()
+    payload["corpora"] = corpora
     page = page.replace("DEFAULT", views["groups"]["own"]).replace(
         "DATA", json.dumps(payload)
     )

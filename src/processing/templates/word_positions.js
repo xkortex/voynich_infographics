@@ -14,14 +14,18 @@
   }
 
   function render() {
-    const mode = $('mode').value,
+    const corpusId = $('corpus').value,
+      corpus = data.corpora[corpusId];
+    $('mode').disabled = corpusId !== 'vms';
+    $('units-control').hidden = corpusId !== 'vms';
+    const mode = corpusId === 'vms' ? $('mode').value : 'letters',
       shared = $('scale').value === 'shared';
     const frequencyOrder = $('order').value === 'frequency';
     const ridges = $('layout').value === 'ridges',
       spacing = Number($('spacing').value);
     $('spacing-control').hidden = !ridges;
     $('spacing-value').value = `${spacing} px`;
-    const stats = data.statistics[mode];
+    const stats = corpus.statistics[mode];
     const symbols = Object.keys(stats.hist).sort((a, b) =>
       (frequencyOrder ? (stats.counts[b] || 0) - (stats.counts[a] || 0) : 0) || (a < b ? -1 : a > b ? 1 : 0));
     const rows = ridges ? symbols.length : Math.ceil(symbols.length / 2);
@@ -31,13 +35,13 @@
     const globalPeak = Math.max(1, ...Object.values(stats.hist).flat());
     const pieces = [
       `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 ${height}" width="1120" height="${height}" role="img" aria-labelledby="title desc">`,
-      '<title id="title">Where EVA symbols occur within words</title>',
-      `<desc id="desc">${escape(`${mode}; ${shared ? 'shared count scale' : 'each symbol’s own peak'}; ${frequencyOrder ? 'frequency order' : 'alphabetical order'}; ${ridges ? 'overlapping ridgelines' : 'separate panels'}. Beginning at left, end at right.`)}</desc>`,
+      `<title id="title">${escape(corpus.heading)}</title>`,
+      `<desc id="desc">${escape(`${corpus.label}; ${mode}; ${shared ? 'shared count scale' : 'each symbol’s own peak'}; ${frequencyOrder ? 'frequency order' : 'alphabetical order'}; ${ridges ? 'overlapping ridgelines' : 'separate panels'}. Beginning at left, end at right.`)}</desc>`,
       '<rect width="1120" height="100%" fill="#fffdf7"/>',
       '<style>text{font-family:system-ui,sans-serif;fill:#263a37}.small{font-size:13px;fill:#62716c}.label{font:16px monospace}.head{font:42px Georgia,serif}.axis{stroke:#9da79e;stroke-width:1}</style>',
-      text(45, 62, 'Where EVA symbols occur within words', 'class="head"'),
-      text(45, 98, `Beginning → middle → end · ${mode === 'groups' ? 'Grouped EVA forms' : 'Individual EVA letters'}`, 'font-size="18"'),
-      text(45, 128, `${format(data.word_count)} word occurrences · ${format(stats.total)} counted tokens · Zandbergen–Landini 3b`, 'class="small"'),
+      text(45, 62, corpus.heading, 'class="head"'),
+      text(45, 98, `Beginning → middle → end · ${corpusId === 'vms' ? (mode === 'groups' ? 'Grouped EVA forms' : 'Individual EVA letters') : corpus.label}`, 'font-size="18"'),
+      text(45, 128, `${format(corpus.word_count)} word occurrences · ${format(stats.total)} counted tokens · ${corpus.source}`, 'class="small"'),
       text(45, 153, `${shared ? 'Shared bin-count scale' : 'Each symbol scaled to its own peak'} · ${frequencyOrder ? 'Most frequent first' : 'Alphabetical'} · ${ridges ? `Ridgelines, ${spacing} px spacing` : 'Separate panels'}`, 'class="small"')
     ];
     symbols.forEach((symbol, index) => {
@@ -64,8 +68,9 @@
       pieces.push(`<line x1="${plotX}" x2="${plotX + width}" y1="${baseline}" y2="${baseline}" class="axis"/>`);
       const glyphY = ridges ? baseline - 42 : baseline - 115;
       const glyphSize = ridges ? 44 : 66;
-      pieces.push(data.glyphs[symbol].replace('<svg aria-hidden="true"', `<svg aria-hidden="true" x="${x}" y="${glyphY}" width="${glyphSize}" height="${glyphSize}"`));
-      pieces.push(text(ridges ? 105 : x + 32, ridges ? baseline - 10 : baseline - 36, symbol, `class="label"${ridges ? '' : ' text-anchor="middle"'}`));
+      if (corpusId === 'vms') pieces.push(data.glyphs[symbol].replace('<svg aria-hidden="true"', `<svg aria-hidden="true" x="${x}" y="${glyphY}" width="${glyphSize}" height="${glyphSize}"`));
+      if (corpusId !== 'vms') pieces.push(text(x + 20, ridges ? baseline - 8 : baseline - 45, symbol, 'font-size="42" font-family="Georgia,serif" text-anchor="middle"'));
+      if (corpusId === 'vms') pieces.push(text(ridges ? 105 : x + 32, ridges ? baseline - 10 : baseline - 36, symbol, `class="label"${ridges ? '' : ' text-anchor="middle"'}`));
       if (ridges) {
         pieces.push(text(1075, baseline - 20, format(count), 'class="small" text-anchor="end"'));
         pieces.push(text(1075, baseline - 3, share.toFixed(3) + '%', 'class="small" text-anchor="end"'));
@@ -84,9 +89,9 @@
     const notes = [
       'Position = token index / (word length − 1), binned into 15 equal intervals. Left = beginning; right = end.',
       'Single-token words map to the middle. Every word occurrence contributes; repeated types are not deduplicated.',
-      'Uncertain words are omitted in full. Grouped forms: cfh, ckh, cph, cth, ch, sh use longest match.',
+      corpus.method,
       ridges ? 'Ridgelines overlap with opaque underlays. Reduced spacing can obscure part of the preceding shape.' : 'Own-peak scaling compares shapes; shared scaling compares absolute bin counts.',
-      'Data: Zandbergen & Landini, ZL3b-n.txt (CC0). Glyph outlines: Gabriel Landini, EVA2.ttf (2025).'
+      corpus.credit
     ];
     notes.forEach((note, index) => pieces.push(text(45, footerY + 79 + index * 21, note, 'class="small"')));
     pieces.push('</svg>');
@@ -97,7 +102,9 @@
     const svg = $('chart').querySelector('svg');
     if (!svg) throw new Error('The chart is not ready.');
     const [, , width, height] = svg.getAttribute('viewBox').split(/\s+/).map(Number);
-    const settings = [$('mode').value, $('scale').value, $('order').value, $('layout').value];
+    const corpus = $('corpus').value;
+    const settings = [corpus === 'vms' ? $('mode').value : 'letters', $('scale').value, $('order').value, $('layout').value];
+    if (corpus !== 'vms') settings.unshift(corpus);
     if ($('layout').value === 'ridges') settings.push($('spacing').value + 'px');
     return {
       xml: new XMLSerializer().serializeToString(svg),
@@ -162,7 +169,7 @@
 
   try {
     data = JSON.parse($('position-data').textContent);
-    ['mode', 'scale', 'order', 'layout'].forEach(id => $(id).addEventListener('change', render));
+    ['corpus', 'mode', 'scale', 'order', 'layout'].forEach(id => $(id).addEventListener('change', render));
     $('spacing').addEventListener('input', render);
     $('save').addEventListener('click', () => save('svg'));
     $('save-png').addEventListener('click', () => save('png'));

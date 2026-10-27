@@ -148,3 +148,28 @@ test('PNG canvas failure reports a useful error and restores the button', async 
   assert.equal(f.downloads.length, 0);
   f.dom.window.close();
 });
+
+test('English and Latin use their own counts, alphabets and corpus-labelled exports', async () => {
+  const f = fixture();
+  const data = JSON.parse(f.doc.getElementById('position-data').textContent);
+  for (const id of ['forme', 'orationum']) {
+    f.choose('corpus', id);
+    f.choose('order', 'frequency');
+    f.choose('layout', 'ridges');
+    const corpus = data.corpora[id];
+    assert.equal(f.doc.getElementById('mode').disabled, true);
+    const symbols = [...f.doc.querySelectorAll('#chart g[data-symbol]')];
+    assert.equal(symbols.reduce((sum, group) => sum + Number(group.dataset.count), 0), corpus.statistics.letters.total);
+    assert.equal(symbols.length, Object.keys(corpus.statistics.letters.hist).length);
+    assert.ok(f.doc.getElementById('chart').textContent.includes(corpus.source));
+    assert.ok(!f.doc.querySelector('#chart svg svg'));
+    f.doc.getElementById('save-png').click();
+    await settle();
+    assert.match(f.downloads.at(-1).filename, new RegExp('eva_word_positions_' + id + '_letters_own_frequency_ridges_52px.png'));
+  }
+  f.choose('corpus', 'vms');
+  assert.equal(f.doc.getElementById('mode').disabled, false);
+  assert.equal(f.doc.getElementById('mode').value, 'groups');
+  assert.ok(f.doc.querySelector('#chart svg svg'));
+  f.dom.window.close();
+});

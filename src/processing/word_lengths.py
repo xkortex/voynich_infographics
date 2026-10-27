@@ -16,7 +16,7 @@ CORPUS_COLORS = ["#187e83", "#d36b28", "#8159a5"]
 TAIL_BIN = 25
 
 
-def edition_word_lengths(text, remove_gutenberg_wrapper=False):
+def edition_words(text, remove_gutenberg_wrapper=False):
     """Apply the historical full-edition cleaning, without filtering commentary."""
     if remove_gutenberg_wrapper:
         text = re.split(r"\*\*\* START OF .*?\*\*\*", text, maxsplit=1)[-1]
@@ -26,7 +26,15 @@ def edition_word_lengths(text, remove_gutenberg_wrapper=False):
     text = re.sub(r"([^\W\d_])-\s*\n\s*([^\W\d_])", r"\1\2", text)
     text = unicodedata.normalize("NFC", text)
     words = re.findall(r"[^\W\d_]+(?:['’][^\W\d_]+)*", text)
-    return [sum(character.isalpha() for character in word) for word in words]
+    return words
+
+
+def edition_word_lengths(text, remove_gutenberg_wrapper=False):
+    """Count alphabetic characters with the shared full-edition tokenization."""
+    return [
+        sum(character.isalpha() for character in word)
+        for word in edition_words(text, remove_gutenberg_wrapper)
+    ]
 
 
 def summarize_lengths(lengths):
