@@ -255,7 +255,7 @@ def build(data_dir, site_dir):
     }
     write_json(out / "manifest.json", manifest)
     with (out / "summary.csv").open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(summaries[0]))
+        writer = csv.DictWriter(stream, fieldnames=list(summaries[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(summaries)
     for extension in ("html", "css", "js"):
