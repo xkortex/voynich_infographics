@@ -10,6 +10,7 @@
   "scripts": {
     "test:reader": "node --test tests/reading_text.test.cjs",
     "test:frequencies": "node --test tests/word_frequencies.test.cjs",
-    "test:positions": "node --test tests/word_positions.test.cjs"
+    "test:positions": "node --test tests/word_positions.test.cjs",
+    "test:vowels": "node --test tests/vowel_discovery.test.cjs"
   }
 }

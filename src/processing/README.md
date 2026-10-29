@@ -104,3 +104,7 @@ EVA search reads the same per-folio JSON files, including folios not yet display
 ## Word frequency transformations
 
 [`word_frequencies.py`](word_frequencies.py) builds the four-source EVA rank curves, exact frequency-of-frequencies histograms, and inspectable family tables. See [WORD_FREQUENCIES.md](WORD_FREQUENCIES.md) for acquisition, population rules, fourteen transformations, denominators and reproduction. The page loads only local text assets.
+
+## Vowel-like symbol explorer
+
+[`vowel_discovery.py`](vowel_discovery.py) computes 44 controlled scenarios for Sukhotin contacts and a two-state HMM, with block-resampling sensitivity, neighbor matrices and linked examples. See [VOWEL_DISCOVERY.md](VOWEL_DISCOVERY.md) for exact fitting limits, seed orientation, controls, reference checks and interpretation. Class A/B assignments are not vowel identifications.
