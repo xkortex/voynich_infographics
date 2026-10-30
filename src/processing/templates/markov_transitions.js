@@ -344,6 +344,17 @@
       if (model) render();
     }));
     $('next').addEventListener('click', next);
+    // Capture Enter before a focused SVG destination can append a fixed unit.
+    // Other native controls retain their ordinary keyboard activation.
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Enter' || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      const target = event.target instanceof Element ? event.target : null;
+      if (target?.closest('select, input, textarea, [contenteditable]:not([contenteditable="false"]), button:not(#next), a, summary')) return;
+      if (!model || $('next').disabled) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (!event.repeat) next();
+    }, true);
     $('reset').addEventListener('click', reset);
     $('undo').addEventListener('click', () => {
       history.pop();

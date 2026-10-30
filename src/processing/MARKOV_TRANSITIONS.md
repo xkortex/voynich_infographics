@@ -71,7 +71,7 @@ are conditional on an observed successor, not a model of termination. There is
 no automatic space or restart at a dead end.
 
 Clicking a destination selects that unit deliberately. Clicking the current
-state or Next samples from the full positive-count distribution with the
+state, pressing Enter in the diagram/page, or Next samples from the full positive-count distribution with the
 browser's `Math.random()` and inverse cumulative sampling. Deterministic manual
 choices are labelled separately from random draws. Each last-choice readout
 records the context, count/total and order used for that choice.
@@ -86,9 +86,12 @@ The diagram is a focused outgoing-transition view, not a force-directed graph
 of every possible context. The left state connects to destination units with
 probability labels and square-root-scaled edge widths. By default it draws the
 12 highest-probability destinations and reports their probability coverage.
-Show all to draw every successor. The complete choice table is always available.
+Choose 6, 12, or all successors. The complete choice table is always available.
 Neither visibility limit nor ranking changes normalization or random sampling.
-SVG nodes support keyboard Enter/Space as well as mouse clicks.
+Enter triggers one random draw even when a diagram node is focused; Space
+activates that node as a deliberate choice. Held-key repeats are ignored.
+Selectors, text fields, links, summaries and other native buttons retain normal
+keyboard behavior. The Next button also accepts Enter without a duplicate draw.
 
 Generated text is synthetic output from a low-order statistical model, not an
 excerpt, translation, or evidence for a particular encoding hypothesis.

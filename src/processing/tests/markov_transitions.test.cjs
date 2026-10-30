@@ -188,3 +188,73 @@ test('hidden tail still participates in Next sampling', async () => {
   assert.equal(f.doc.getElementById('output').textContent, 'x␠o');
   f.dom.window.close();
 });
+
+test('6/12/all changes only the diagram, and Enter makes one weighted sample', async () => {
+  const alphabet = [' ', 'x', ...'abcdefghijklmno'];
+  const tail = alphabet.slice(2).map((_, index) => [index + 2, 1]);
+  const wide = {
+    alphabet,
+    starts: [
+      [1, 1]
+    ],
+    start_pairs: {
+      '1': [
+        [0, 1]
+      ]
+    },
+    first: {
+      '1': [
+        [0, 1]
+      ],
+      '0': tail
+    },
+    second: {
+      '1,0': tail
+    },
+    runs: 1
+  };
+  const f = await fixture(wide);
+  f.append(1);
+  f.append(0);
+  assert.deepEqual([...f.doc.getElementById('limit').options].map(option => option.value), ['6', '12', 'all']);
+  for (const [limit, count] of [
+      ['6', 6],
+      ['12', 12],
+      ['all', 15]
+    ]) {
+    f.choose('limit', limit);
+    assert.equal(f.doc.querySelectorAll('#diagram .destination').length, count);
+    assert.equal(f.doc.querySelectorAll('#choices tr').length, 15);
+  }
+  f.choose('limit', '6');
+  f.dom.window.Math.random = () => .9999;
+  // Enter on the first displayed destination samples the hidden tail instead
+  // of appending that focused node, and must not double-fire its handler.
+  const node = f.doc.querySelector('#diagram .destination');
+  node.dispatchEvent(new f.dom.window.KeyboardEvent('keydown', {
+    key: 'Enter',
+    bubbles: true,
+    cancelable: true
+  }));
+  assert.equal(f.doc.getElementById('output').textContent, 'x␠o');
+  f.doc.getElementById('reset').click();
+  const enter = () => new f.dom.window.KeyboardEvent('keydown', {
+    key: 'Enter',
+    bubbles: true,
+    cancelable: true
+  });
+  f.doc.getElementById('next').dispatchEvent(enter());
+  assert.equal(f.doc.getElementById('output').textContent, 'x');
+  f.doc.getElementById('order').dispatchEvent(enter());
+  assert.equal(f.doc.getElementById('output').textContent, 'x');
+  f.doc.body.dispatchEvent(new f.dom.window.KeyboardEvent('keydown', {
+    key: 'Enter',
+    repeat: true,
+    bubbles: true,
+    cancelable: true
+  }));
+  assert.equal(f.doc.getElementById('output').textContent, 'x');
+  f.doc.body.dispatchEvent(enter());
+  assert.equal(f.doc.getElementById('output').textContent, 'x␠');
+  f.dom.window.close();
+});
