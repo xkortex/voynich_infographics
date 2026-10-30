@@ -20,7 +20,7 @@ async function fixture() {
   });
   dom.window.fetch = async url => ({
     ok: true,
-    json: async () => JSON.parse(fs.readFileSync(path.join(page, url), 'utf8'))
+    json: async () => JSON.parse(fs.readFileSync(path.join(page, url.split('?')[0]), 'utf8'))
   });
   dom.window.eval(fs.readFileSync(path.join(root, 'src/processing/templates/vowel_discovery.js'), 'utf8'));
   const doc = dom.window.document;
@@ -73,5 +73,29 @@ test('reference labels stay hidden until revealed and deletion retains no refere
   await settle(f);
   assert.equal(f.doc.getElementById('control').value, 'native');
   assert.equal(f.doc.getElementById('reveal').disabled, true);
+  f.dom.window.close();
+});
+
+test('blind search is the grouped default; class size and runner-up sets update assignments', async () => {
+  const f = await fixture();
+  assert.equal(f.doc.getElementById('mode').value, 'groups');
+  assert.equal(f.doc.getElementById('method').value, 'alternation');
+  assert.equal(f.doc.getElementById('class-size').value, '3');
+  assert.match(f.doc.querySelector('#candidate-rows tr').textContent, /\{a, e, o\}/);
+  assert.match(f.doc.getElementById('candidate-cards').textContent, /65.98% alternation/);
+  assert.match(f.doc.getElementById('candidate-cards').textContent, /72.9% alternation/);
+  assert.equal(f.doc.querySelectorAll('#candidate-rows tr').length, 8);
+  f.choose('class-size', '4');
+  assert.match(f.doc.querySelector('#candidate-rows tr').textContent, /\{a, e, o, y\}/);
+  assert.match(f.doc.getElementById('blind-head').textContent, /k=4/);
+  const first = f.doc.getElementById('contact-summary').textContent;
+  f.doc.querySelectorAll('#candidate-rows button')[1].click();
+  assert.notEqual(f.doc.getElementById('contact-summary').textContent, first);
+  f.doc.getElementById('reset').click();
+  assert.equal(f.doc.getElementById('contact-summary').textContent, first);
+  f.choose('mode', 'letters');
+  await settle(f);
+  f.choose('class-size', '3');
+  assert.match(f.doc.querySelector('#candidate-rows tr').textContent, /\{a, h, o\}/);
   f.dom.window.close();
 });

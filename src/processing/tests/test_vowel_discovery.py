@@ -146,5 +146,91 @@ class VowelAssetsTests(unittest.TestCase):
                     )
             if item["control"] == "deleted":
                 self.assertFalse(any(is_reference_vowel(s) for s in data["symbols"]))
+            for size, search in data["alternation"].items():
+                import math
+
+                self.assertEqual(search["candidates_tested"], math.comb(n, int(size)))
+                self.assertEqual(search["pair_count"], sum(map(sum, data["pairs"])))
+                self.assertGreaterEqual(search["tied_optima"], 1)
+                previous = None
+                for candidate in search["top"]:
+                    chosen = set(candidate["members"])
+                    self.assertEqual(len(chosen), int(size))
+                    score = sum(
+                        value
+                        for i, row in enumerate(data["pairs"])
+                        for j, value in enumerate(row)
+                        if (i in chosen) != (j in chosen)
+                    )
+                    self.assertEqual(score, candidate["cross_pairs"])
+                    if previous is not None:
+                        self.assertLessEqual(score, previous)
+                    previous = score
+                for row in data["bootstrap"]["alternation"][size]:
+                    self.assertTrue(0 <= row["A"] <= row["n"] <= manifest["bootstraps"])
             for example in data["examples"]:
                 self.assertTrue(all(s in data["symbols"] for s in example["symbols"]))
+
+
+class BlindAlternationTests(unittest.TestCase):
+    def test_exact_search_matches_independent_subset_scoring(self):
+        from vowel_discovery import blind_alternation
+
+        pairs = np.array(
+            [[7, 9, 1, 2], [3, 4, 8, 0], [5, 2, 6, 11], [1, 4, 2, 3]], dtype=np.int64
+        )
+        counts = pairs.sum(axis=0) + pairs.sum(axis=1)
+        results = blind_alternation(pairs, counts)
+        for size in range(1, 5):
+            expected = []
+            for subset in itertools.combinations(range(4), size):
+                score = sum(
+                    int(pairs[i, j])
+                    for i in range(4)
+                    for j in range(4)
+                    if (i in subset) != (j in subset)
+                )
+                expected.append((score, subset))
+            expected.sort(key=lambda item: (-item[0], item[1]))
+            self.assertEqual(results[str(size)]["candidates_tested"], len(expected))
+            self.assertEqual(
+                results[str(size)]["top"][0]["members"], list(expected[0][1])
+            )
+            self.assertEqual(
+                results[str(size)]["top"][0]["cross_pairs"], expected[0][0]
+            )
+            self.assertAlmostEqual(
+                results[str(size)]["top"][0]["percent"],
+                100 * expected[0][0] / pairs.sum(),
+            )
+
+    def test_ties_self_pairs_and_absent_units_are_explicit(self):
+        from vowel_discovery import blind_alternation
+
+        pairs = np.array([[5, 3, 0], [1, 0, 0], [0, 0, 0]], dtype=np.int64)
+        result = blind_alternation(pairs, np.array([8, 4, 0]))
+        self.assertEqual(result["1"]["tied_optima"], 2)
+        self.assertEqual(result["1"]["top"][0]["members"], [0])
+        self.assertEqual(result["1"]["candidates_tested"], 2)
+        self.assertAlmostEqual(result["1"]["top"][0]["percent"], 100 * 4 / 9)
+        self.assertNotIn("3", result)
+        empty = blind_alternation(np.zeros((2, 2), dtype=np.int64), np.array([2, 3]))
+        self.assertIsNone(empty["1"]["top"][0]["percent"])
+
+    def test_grouped_zl_reproduces_three_and_four_symbol_candidates(self):
+        data = json.loads((DATA / "ZL-groups-whole-native.json").read_text())
+        for size, expected in [("3", {"a", "e", "o"}), ("4", {"a", "e", "o", "y"})]:
+            search = data["alternation"][size]
+            best = search["top"][0]
+            self.assertEqual({data["symbols"][i] for i in best["members"]}, expected)
+            for candidate in search["top"]:
+                chosen = set(candidate["members"])
+                score = sum(
+                    value
+                    for i, row in enumerate(data["pairs"])
+                    for j, value in enumerate(row)
+                    if (i in chosen) != (j in chosen)
+                )
+                self.assertEqual(score, candidate["cross_pairs"])
+            for row in data["bootstrap"]["alternation"][size]:
+                self.assertTrue(0 <= row["A"] <= row["n"] <= 4)

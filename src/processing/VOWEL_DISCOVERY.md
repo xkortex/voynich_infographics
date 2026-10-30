@@ -1,5 +1,8 @@
 # Vowel-like symbol discovery
 
+The default view is now **blind exhaustive alternation search**, using grouped
+EVA and a three-symbol candidate class. Sukhotin and the HMM remain comparisons.
+
 This is a sensitivity experiment on distributional A/B classes. Neither class is
 identified as phonetic vowels. The page links its code, data and primary papers.
 It does not numerically reproduce an earlier published Voynich analysis.
@@ -63,6 +66,43 @@ unrecorded live transcription.
 
 ## Algorithms
 
+**Blind fixed-size alternation search.** For k = 1, 2, 3, 4, enumerate every
+subset of k observed units. For a candidate A, count directed within-word pairs
+with exactly one endpoint in A. Everything else is B. Maximize this count and
+divide by all within-word pairs (including self-pairs) for the alternation rate.
+There are no vowel labels, seed symbols or frequency cutoffs in this search.
+The minimum-count UI setting is visibility-only.
+
+The implementation uses the equivalent weighted cut formula: symmetrize pairs
+into M with diagonal zero, then score(A) = sum of row sums for members of A
+minus twice the sum of M[i,j] over unordered pairs inside A. This is an exact
+integer objective. Save the top eight sets ordered by score descending and
+lexical subset order, with the total number of exactly tied optima and total
+candidate count. The small candidate class is A; there is no seed-based flip.
+
+The search is repeated independently for every source, control and block
+resample. Blind-search stability bars use the first lexical optimum of the
+selected k in each resample, with unobserved symbols omitted from that symbol's
+denominator. These bars are sensitive to ties and do not average all optima.
+
+On the supplied ZL grouped whole-word native input, the unique best k=3 set is
+`{a,e,o}` (85,961 / 130,287 pairs; 65.9781866%), and k=4 is `{a,e,o,y}`
+(94,974 / 130,287; 72.8959912%). This verifies the earlier candidate-nucleus
+result on these inputs. Individual EVA letters give a different optimum
+because `ch`, `sh` and gallows composites are split. These are in-sample maxima,
+not held-out accuracy or a discovery of phonetic values. More members and more
+candidate sets change the optimization problem; scores across k are not a
+penalty-adjusted model comparison.
+
+The candidate cards show best k=3 and k=4 results, and the ranked table follows
+the selected k. “Use set” applies any displayed candidate to the editable
+assignments; the saved fitted columns and comparison grid still show the
+optimum. Reset restores the selected method's optimum. CSV files include k,
+blind assignments and bootstrap numerators/denominators as well as the other
+methods. Presentation assets are content-versioned; data requests carry the
+analysis version to prevent a stale schema mixing with a new interface.
+
+
 **Sukhotin.** Following [Mayer (2010), §3.2](https://aclanthology.org/W10-2208/),
 symmetrize directed within-word bigram counts, zero the diagonal, and initialize
 scores as contact sums. Select the largest positive score, assign that symbol
@@ -121,7 +161,7 @@ including when a grouped sign is absent in a letter representation.
 
 ## Interactive views
 
-- The stability table has glyph labels, full-fit assignments, HMM occupancy,
+- The stability table has glyph labels, blind-search and other full-fit assignments, HMM occupancy,
   block-resampling bars, initialization sensitivity and editable A/B/unknown
   assignments. The current editing method is separate from the fitted results.
 - The directed matrix offers row-normalized next-symbol probabilities or log2

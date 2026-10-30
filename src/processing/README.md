@@ -107,4 +107,4 @@ EVA search reads the same per-folio JSON files, including folios not yet display
 
 ## Vowel-like symbol explorer
 
-[`vowel_discovery.py`](vowel_discovery.py) computes 44 controlled scenarios for Sukhotin contacts and a two-state HMM, with block-resampling sensitivity, neighbor matrices and linked examples. See [VOWEL_DISCOVERY.md](VOWEL_DISCOVERY.md) for exact fitting limits, seed orientation, controls, reference checks and interpretation. Class A/B assignments are not vowel identifications.
+[`vowel_discovery.py`](vowel_discovery.py) computes 44 controlled scenarios for exhaustive size-1–4 alternation search, Sukhotin contacts and a two-state HMM, with block-resampling sensitivity, neighbor matrices and linked examples. See [VOWEL_DISCOVERY.md](VOWEL_DISCOVERY.md) for exact fitting limits, seed orientation, controls, reference checks and interpretation. Class A/B assignments are not vowel identifications.

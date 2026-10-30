@@ -4,6 +4,7 @@
   const $ = id => document.getElementById(id);
   const NS = 'http://www.w3.org/2000/svg';
   const cache = new Map();
+  const dataVersion = document.querySelector('script[data-version]')?.dataset.version || 'development';
   let manifest, glyphs = {},
     current, selected, related = [],
     version = 0,
@@ -33,7 +34,7 @@
     return node;
   }
   async function read(file) {
-    if (!cache.has(file)) cache.set(file, fetch('data/' + file).then(response => {
+    if (!cache.has(file)) cache.set(file, fetch('data/' + file + '?v=' + encodeURIComponent(dataVersion)).then(response => {
       if (!response.ok) throw new Error(`Could not load ${file} (${response.status})`);
       return response.json();
     }).catch(error => {
@@ -47,8 +48,16 @@
     return symbol === 'æ' || symbol === 'œ' || 'aeiou'.includes(symbol.normalize('NFD')[0]);
   }
 
+  function classValues(data, method) {
+    if (method === 'alternation') {
+      const top = data.alternation[$('class-size').value]?.top[0];
+      return data.symbols.map((_, i) => data.counts[i] > 0 && top ? top.members.includes(i) : null);
+    }
+    return data[method].map(value => value === null ? null : method === 'hmm' ? value >= .5 : Boolean(value));
+  }
+
   function fitted() {
-    return current[$('method').value].map(value => value === null ? null : ($('method').value === 'hmm' ? (value >= .5) : Boolean(value)));
+    return classValues(current, $('method').value);
   }
 
   function visible() {
@@ -109,10 +118,10 @@
         scenario
       }) => {
         const j = data.symbols.indexOf(current.symbols[i]);
-        const p = j < 0 ? null : data[method][j];
+        const p = j < 0 ? null : classValues(data, method)[j];
         const cell = el('td');
-        cell.append(badge(p === null ? null : method === 'hmm' ? p >= .5 : Boolean(p)));
-        cell.title = scenario.id + ' · seed ' + data.seed_symbol + (p === null ? ' · unseen' : '');
+        cell.append(badge(p));
+        cell.title = scenario.id + (method === 'alternation' ? ' · k=' + $('class-size').value + ' · best alternation ' + fmt(data.alternation[$('class-size').value].top[0].percent) + '%' : ' · seed ' + data.seed_symbol) + (p === null ? ' · unseen' : '');
         row.append(cell);
       });
       $('perturbation-rows').append(row);
@@ -135,6 +144,60 @@
     }
   }
 
+  function candidates() {
+    const size = $('class-size').value,
+      search = current.alternation[size];
+    $('candidate-cards').replaceChildren();
+    ['3', '4'].forEach(k => {
+      const result = current.alternation[k],
+        best = result?.top[0];
+      if (!best) return;
+      const card = el('div');
+      card.className = 'metric';
+      card.append(el('span', `Best ${k}-symbol class`));
+      const members = el('div');
+      members.className = 'candidate-set';
+      best.members.forEach(i => members.append(glyph(i)));
+      card.append(members, el('strong', best.percent === null ? 'No adjacent pairs' : fmt(best.percent) + '% alternation'));
+      const button = el('button', 'Use k=' + k);
+      button.addEventListener('click', () => {
+        $('class-size').value = k;
+        $('method').value = 'alternation';
+        assignments = fitted();
+        render();
+      });
+      card.append(button);
+      $('candidate-cards').append(card);
+    });
+    $('candidate-rows').replaceChildren();
+    if (!search) {
+      $('search-summary').textContent = 'Too few observed symbols for this class size.';
+      return;
+    }
+    $('search-summary').textContent = `Exhaustive k=${size}: ${fmt(search.candidates_tested)} candidate sets; ${fmt(search.tied_optima)} tied optimum/optima; ${fmt(search.pair_count)} adjacent pairs. Showing the first ${search.top.length} ranked sets. No vowel labels were used.`;
+    search.top.forEach((candidate, index) => {
+      const row = el('tr');
+      row.append(el('td', index + 1));
+      const members = el('td');
+      members.textContent = '{' + candidate.members.map(i => current.symbols[i]).join(', ') + '}';
+      row.append(members, el('td', fmt(candidate.cross_pairs)), el('td', candidate.percent === null ? 'undefined' : fmt(candidate.percent) + '%'), el('td', candidate.percent === null ? 'undefined' : fmt(search.top[0].percent - candidate.percent) + ' pp'));
+      const action = el('td'),
+        button = el('button', 'Use set');
+      button.addEventListener('click', () => {
+        $('method').value = 'alternation';
+        assignments = current.symbols.map((_, i) => current.counts[i] > 0 ? candidate.members.includes(i) : null);
+        metrics();
+        table();
+        matrix();
+        examples();
+        perturbations();
+      });
+      action.append(button);
+      row.append(action);
+      $('candidate-rows').append(row);
+    });
+  }
+
   function metrics() {
     const holder = $('metrics');
     holder.replaceChildren();
@@ -155,12 +218,18 @@
   }
 
   function table() {
+    $('blind-head').textContent = 'Blind k=' + $('class-size').value;
+    $('blind-bootstrap-head').textContent = 'Blind k=' + $('class-size').value + ' block resamples';
+    const blind = classValues(current, 'alternation');
     $('symbol-rows').replaceChildren();
     visible().sort((a, b) => current.counts[b] - current.counts[a] || a - b).forEach(i => {
       const row = el('tr'),
         symbolCell = el('td');
       symbolCell.append(glyph(i));
       row.append(symbolCell, el('td', fmt(current.counts[i])));
+      const blindCell = el('td');
+      blindCell.append(badge(blind[i]));
+      row.append(blindCell);
       const suk = el('td');
       suk.append(badge(current.sukhotin[i]));
       row.append(suk);
@@ -168,9 +237,9 @@
       hmm.append(badge(current.hmm[i] === null ? null : current.hmm[i] >= .5));
       if (current.hmm[i] !== null) hmm.append(el('small', ' ' + percent(current.hmm[i]) + ' A occupancy'));
       row.append(hmm);
-      ['sukhotin', 'hmm'].forEach(method => {
+      ['alternation', 'sukhotin', 'hmm'].forEach(method => {
         const td = el('td'),
-          s = current.bootstrap[method][i];
+          s = method === 'alternation' ? current.bootstrap.alternation[$('class-size').value][i] : current.bootstrap[method][i];
         td.append(bar(s.A, s.n));
         row.append(td);
       });
@@ -290,6 +359,7 @@
   }
 
   function render() {
+    candidates();
     metrics();
     table();
     matrix();
@@ -309,8 +379,8 @@
     $('status').textContent = 'Loading fitted classes…';
     current = null;
     selected = null;
-    ['metrics', 'symbol-rows', 'matrix', 'examples', 'perturbation-head', 'perturbation-rows', 'contact-summary', 'stability-note', 'reference-summary'].forEach(id => $(id).replaceChildren());
-    ['method', 'reset', 'download', 'minimum'].forEach(id => $(id).disabled = true);
+    ['metrics', 'symbol-rows', 'matrix', 'examples', 'perturbation-head', 'perturbation-rows', 'contact-summary', 'stability-note', 'reference-summary', 'candidate-cards', 'candidate-rows', 'search-summary'].forEach(id => $(id).replaceChildren());
+    ['method', 'class-size', 'reset', 'download', 'minimum'].forEach(id => $(id).disabled = true);
     try {
       const cases = manifest.scenarios.filter(item => vms ?
         ((item.mode === requested.mode && item.scope === 'whole' && item.control === 'native' && item.source.length === 2) ||
@@ -327,7 +397,7 @@
       related = comparisons;
       assignments = fitted();
       render();
-      ['method', 'reset', 'download', 'minimum'].forEach(id => $(id).disabled = false);
+      ['method', 'class-size', 'reset', 'download', 'minimum'].forEach(id => $(id).disabled = false);
       $('status').textContent = manifest.sources.find(item => item.id === source).label + ' · ' + $('scope').selectedOptions[0].textContent + ' · ' + $('control').selectedOptions[0].textContent + '. All models were fitted without reference vowel labels.';
     } catch (error) {
       if (token === version) $('status').textContent = error.message + '. Change a selection to retry.';
@@ -338,15 +408,15 @@
     if (!current) return;
     const quote = value => '"' + String(value ?? '').replaceAll('"', '""') + '"';
     const rows = [
-      ['scenario', 'symbol', 'count', 'sukhotin_A', 'hmm_A_occupancy', 'sukhotin_boot_A', 'sukhotin_boot_n', 'hmm_boot_A', 'hmm_boot_n', 'current_class']
+      ['scenario', 'symbol', 'count', 'blind_k', 'blind_A', 'blind_boot_A', 'blind_boot_n', 'sukhotin_A', 'hmm_A_occupancy', 'sukhotin_boot_A', 'sukhotin_boot_n', 'hmm_boot_A', 'hmm_boot_n', 'current_class']
     ];
-    current.symbols.forEach((symbol, i) => rows.push([selected.id, symbol, current.counts[i], current.sukhotin[i], current.hmm[i], current.bootstrap.sukhotin[i].A, current.bootstrap.sukhotin[i].n, current.bootstrap.hmm[i].A, current.bootstrap.hmm[i].n, assignments[i] === null ? '?' : assignments[i] ? 'A' : 'B']));
+    current.symbols.forEach((symbol, i) => rows.push([selected.id, symbol, current.counts[i], $('class-size').value, classValues(current, 'alternation')[i], current.bootstrap.alternation[$('class-size').value][i].A, current.bootstrap.alternation[$('class-size').value][i].n, current.sukhotin[i], current.hmm[i], current.bootstrap.sukhotin[i].A, current.bootstrap.sukhotin[i].n, current.bootstrap.hmm[i].A, current.bootstrap.hmm[i].n, assignments[i] === null ? '?' : assignments[i] ? 'A' : 'B']));
     const url = URL.createObjectURL(new Blob([rows.map(row => row.map(quote).join(',')).join('\n')], {
       type: 'text/csv;charset=utf-8'
     }));
     const link = el('a');
     link.href = url;
-    link.download = selected.id + '-classes.csv';
+    link.download = selected.id + '-k' + $('class-size').value + '-classes.csv';
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
@@ -355,6 +425,12 @@
     $('source').replaceChildren(...manifest.sources.map(source => option(source.id, source.id + ' · ' + source.label)));
     ['source', 'mode', 'scope', 'control'].forEach(id => $(id).addEventListener('change', load));
     $('method').addEventListener('change', () => {
+      if (current) {
+        assignments = fitted();
+        render();
+      }
+    });
+    $('class-size').addEventListener('change', () => {
       if (current) {
         assignments = fitted();
         render();

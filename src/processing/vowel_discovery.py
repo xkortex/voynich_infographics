@@ -8,6 +8,7 @@ no known vowel labels are used in fitting. Publish only small derived assets.
 import argparse
 from collections import Counter, defaultdict
 import hashlib
+import itertools
 import json
 from pathlib import Path
 import random
@@ -266,6 +267,46 @@ def fit_hmm(sequences, symbols, anchor, seed, epochs=25):
     }
 
 
+def blind_alternation(pairs, counts, maximum_size=4, top_n=8):
+    """Exhaustively maximize the directed cross-class edge count at fixed k.
+
+    No seed or vowel labels. All observed units, including rare ones, compete.
+    Self-pairs remain in the denominator but can never cross classes. Exact
+    score ties use lexical subset order, and the number of tied optima is saved.
+    """
+    import numpy as np
+
+    contacts = pairs + pairs.T
+    contacts = contacts.copy()
+    np.fill_diagonal(contacts, 0)
+    degree = contacts.sum(axis=1)
+    active = [int(i) for i in np.flatnonzero(counts)]
+    total = int(pairs.sum())
+    results = {}
+    for size in range(1, min(maximum_size, len(active)) + 1):
+        subsets = np.array(list(itertools.combinations(active, size)), dtype=int)
+        scores = degree[subsets].sum(axis=1)
+        for left in range(size):
+            for right in range(left + 1, size):
+                scores -= 2 * contacts[subsets[:, left], subsets[:, right]]
+        order = np.argsort(-scores, kind="stable")
+        best = int(scores[order[0]])
+        results[str(size)] = {
+            "candidates_tested": len(subsets),
+            "tied_optima": int(np.sum(scores == best)),
+            "pair_count": total,
+            "top": [
+                {
+                    "members": subsets[i].tolist(),
+                    "cross_pairs": int(scores[i]),
+                    "percent": 100 * int(scores[i]) / total if total else None,
+                }
+                for i in order[:top_n]
+            ],
+        }
+    return results
+
+
 def model_run(sequences, symbols, seed, limit, restarts):
     import numpy as np
 
@@ -282,6 +323,7 @@ def model_run(sequences, symbols, seed, limit, restarts):
         "sukhotin": [
             i in selected if counts[i] > 0 else None for i in range(len(symbols))
         ],
+        "alternation": blind_alternation(pairs, counts),
         "seed_symbol": symbols[anchor],
         "hmm": best["probabilities"],
         "fit_words": len(sample),
@@ -353,6 +395,22 @@ def scenario(source, mode, scope, control, bootstraps=4, fit_words=3000):
             }
             for i in range(len(symbols))
         ]
+    result["bootstrap"]["alternation"] = {}
+    for size in result["alternation"]:
+        result["bootstrap"]["alternation"][size] = [
+            {
+                "A": sum(
+                    i in run["alternation"][size]["top"][0]["members"]
+                    for run in samples
+                    if size in run["alternation"] and run["sukhotin"][i] is not None
+                ),
+                "n": sum(
+                    size in run["alternation"] and run["sukhotin"][i] is not None
+                    for run in samples
+                ),
+            }
+            for i in range(len(symbols))
+        ]
     return {
         "symbols": symbols,
         "counts": counts.tolist(),
@@ -384,7 +442,7 @@ def install_vowel_entry(site_dir):
         flags=re.S,
     )
     entry = """<!-- VOWEL ENTRY -->
-<article class="entry"><div style="padding:30px;background:#e6ece7;border:1px solid #bdcbc2;border-radius:8px"><p class="eyebrow">Distributional classes / controlled experiments</p><h2 style="font-size:40px">Which signs<br>behave like vowels?</h2><p>Two methods. Shuffled and vowel-deleted controls. No assumed decipherment.</p></div><div><p class="eyebrow">Stability → neighbors → actual words</p><h2>Vowel-like symbol discovery</h2><p>Compare inferred classes across transcriptions, grouping and word interiors, inspect resampling stability, and test your own assignments.</p><a class="open" href="pages/vowel-discovery/">Explore candidate classes →</a></div></article>
+<article class="entry"><div style="padding:30px;background:#e6ece7;border:1px solid #bdcbc2;border-radius:8px"><p class="eyebrow">Distributional classes / controlled experiments</p><h2 style="font-size:40px">Which signs<br>behave like vowels?</h2><p>Blind alternation search, Sukhotin and HMM. Matched controls. No assumed decipherment.</p></div><div><p class="eyebrow">Stability → neighbors → actual words</p><h2>Vowel-like symbol discovery</h2><p>Compare inferred classes across transcriptions, grouping and word interiors, inspect resampling stability, and test your own assignments.</p><a class="open" href="pages/vowel-discovery/">Explore candidate classes →</a></div></article>
 <!-- END VOWEL ENTRY -->
 """
     path.write_text(
@@ -411,6 +469,8 @@ def main():
         "restarts": 3,
         "max_word_units": 30,
         "max_epochs": 25,
+        "alternation_sizes": [1, 2, 3, 4],
+        "alternation_top_n": 8,
         "numpy": np.__version__,
         "python": sys.version.split()[0],
         "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
@@ -483,11 +543,20 @@ def main():
     )
     for extension in ("html", "js", "css"):
         destination = "index.html" if extension == "html" else "explorer." + extension
-        (page / destination).write_text(
-            (
-                Path(__file__).parent / "templates" / ("vowel_discovery." + extension)
-            ).read_text()
-        )
+        template_dir = Path(__file__).parent / "templates"
+        content = (template_dir / ("vowel_discovery." + extension)).read_text()
+        if extension == "html":
+            for asset in ("js", "css"):
+                digest = hashlib.sha256(
+                    (template_dir / ("vowel_discovery." + asset)).read_bytes()
+                ).hexdigest()[:12]
+                attributes = f'?v={digest}"'
+                if asset == "js":
+                    attributes += f' data-version="{manifest["script_sha256"]}"'
+                content = content.replace(
+                    f'explorer.{asset}"', f"explorer.{asset}" + attributes
+                )
+        (page / destination).write_text(content)
     install_vowel_entry(args.site_dir)
 
 
