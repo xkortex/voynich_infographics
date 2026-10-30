@@ -96,6 +96,30 @@ keyboard behavior. The Next button also accepts Enter without a duplicate draw.
 Generated text is synthetic output from a low-order statistical model, not an
 excerpt, translation, or evidence for a particular encoding hypothesis.
 
+## Lexicon highlighting
+
+The optional **Highlight lexicon words** mode (on by default) checks exact
+whole-word spellings against the accepted lexicon of the selected transcription.
+The same `text_runs` parsing policy constructs the lexicon, with occurrence
+counts and the first observed source folio. Letter/grouped modes share that
+source lexicon; grouping does not change the reconstructed word spelling.
+
+A space or a model dead end completes a word. Completed matches receive a solid
+highlight. A current unfinished word that happens to equal a lexicon entry gets
+a dotted outline and is not counted as completed; extending it to a non-match
+removes the highlight. No prefix/subword matching is performed. Undo, source
+changes, and toggles recompute the display without changing the transition model
+or generated units. Copy continues to use plain text with ordinary spaces.
+
+Matches link to a source-folio exact-spelling candidate in Voynichese, with the
+source occurrence count in the tooltip. A different live transcription may not
+contain that spelling. Highlighting indicates corpus membership, not a meaningful
+phrase or translation. Synthetic words absent from the lexicon are left plain.
+
+Each source has a separate small `SOURCE-lexicon.json` containing
+`[word, count, folio]` rows and input/generator fingerprints. It is fetched with
+the model and cached per source. No raw corpus is published.
+
 ## Published schema and versioning
 
 One JSON per source/unit mode contains the alphabet, unit frequencies, initial

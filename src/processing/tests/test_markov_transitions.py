@@ -6,7 +6,7 @@ import json
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from markov_transitions import text_runs, transition_counts
+from markov_transitions import text_runs, transition_counts, lexicon_counts
 
 
 class MarkovTests(unittest.TestCase):
@@ -48,6 +48,14 @@ class MarkovTests(unittest.TestCase):
         self.assertEqual("".join(letters[0]), "chody shaiin")
         self.assertEqual("".join(grouped[0]), "chody shaiin")
 
+    def test_lexicon_counts_complete_source_words_and_folio_examples(self):
+        text = "<f1r.1,@P0> daiin.chody.cho?y\n<f2v.1,@P0> daiin.shaiin"
+        words = {word: (count, folio) for word, count, folio in lexicon_counts(text)}
+        self.assertEqual(
+            words, {"daiin": (2, "f1r"), "chody": (1, "f1r"), "shaiin": (1, "f2v")}
+        )
+        self.assertNotIn("cho", words)
+
     def test_no_fictional_successor_or_empty_run_start(self):
         data = transition_counts([[], ["a"], ["b"]])
         self.assertEqual(data["runs"], 2)
@@ -65,6 +73,19 @@ class MarkovAssetsTests(unittest.TestCase):
         manifest = json.loads((DATA / "manifest.json").read_text())
         self.assertEqual(len(manifest["sources"]), 4)
         for source in manifest["sources"]:
+            vocabulary = json.loads((DATA / source["lexicon"]).read_text())
+            self.assertEqual(vocabulary["input_sha256"], source["sha256"])
+            self.assertEqual(vocabulary["script_sha256"], manifest["script_sha256"])
+            self.assertEqual(len(vocabulary["words"]), source["lexicon_types"])
+            self.assertEqual(
+                len(vocabulary["words"]), len({row[0] for row in vocabulary["words"]})
+            )
+            self.assertTrue(
+                all(
+                    count > 0 and folio.startswith("f")
+                    for _, count, folio in vocabulary["words"]
+                )
+            )
             for file in source["files"].values():
                 model = json.loads((DATA / file).read_text())
                 n = len(model["alphabet"])

@@ -40,6 +40,21 @@ def text_runs(text, mode):
             yield run
 
 
+def lexicon_counts(text):
+    """Count whole accepted words, with a source-folio spelling example."""
+    counts = Counter()
+    folios = {}
+    for line in text.splitlines():
+        match = LOCUS.match(line)
+        if not match:
+            continue
+        for run in text_runs(line, "letters"):
+            for word in "".join(run).split(" "):
+                counts[word] += 1
+                folios.setdefault(word, match.group(1))
+    return [[word, count, folios[word]] for word, count in sorted(counts.items())]
+
+
 def transition_counts(runs):
     """Sparse integer counts; normalize only over observed successors in the UI."""
     runs = [run for run in runs if run]
@@ -128,6 +143,18 @@ def main():
             "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             "files": {},
         }
+        source["lexicon"] = f"{code}-lexicon.json"
+        words = lexicon_counts(path.read_text(encoding="utf-8-sig"))
+        source["lexicon_types"] = len(words)
+        write_json(
+            page / "data" / source["lexicon"],
+            {
+                "words": words,
+                "source": code,
+                "input_sha256": source["sha256"],
+                "script_sha256": manifest["script_sha256"],
+            },
+        )
         for mode in ("letters", "groups"):
             data = transition_counts(
                 text_runs(path.read_text(encoding="utf-8-sig"), mode)

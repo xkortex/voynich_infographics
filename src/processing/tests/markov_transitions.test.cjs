@@ -74,6 +74,7 @@ async function fixture(data = model) {
       id,
       label: id,
       sha256: 'fixture',
+      lexicon: id + '-lexicon.json',
       url: 'https://example.test/source',
       files: {
         groups: id + '.json',
@@ -83,7 +84,13 @@ async function fixture(data = model) {
   };
   dom.window.fetch = async url => ({
     ok: true,
-    json: async () => url.includes('manifest') ? manifest : url.includes('glyphs') ? {} : structuredClone(data)
+    json: async () => url.includes('manifest') ? manifest : url.includes('glyphs') ? {} : url.includes('lexicon') ? {
+      words: url.includes('IT-lexicon') ? [] : [
+        ['a', 9, 'f1r'],
+        ['b', 5, 'f2v'],
+        ['c', 2, 'f3r']
+      ]
+    } : structuredClone(data)
   });
   dom.window.eval(fs.readFileSync(path.join(templates, 'markov_transitions.js'), 'utf8'));
   await settle();
@@ -256,5 +263,47 @@ test('6/12/all changes only the diagram, and Enter makes one weighted sample', a
   assert.equal(f.doc.getElementById('output').textContent, 'x');
   f.doc.body.dispatchEvent(enter());
   assert.equal(f.doc.getElementById('output').textContent, 'x␠');
+  f.dom.window.close();
+});
+
+test('lexicon highlighting uses exact source words and distinguishes unfinished matches', async () => {
+  const data = structuredClone(model);
+  data.first['1'] = [
+    [0, 2],
+    [2, 1]
+  ];
+  const f = await fixture(data);
+  f.append(1);
+  let hit = f.doc.querySelector('#output .lexicon-match');
+  assert.equal(hit.dataset.word, 'a');
+  assert.equal(hit.classList.contains('pending-match'), true);
+  assert.equal(hit.href, 'https://www.voynichese.com/#/f1r/exa:a');
+  assert.match(hit.title, /9 occurrences in ZL/);
+  f.append(2); // ab is not in the lexicon; the matching prefix must lose its highlight.
+  assert.equal(f.doc.querySelector('#output .lexicon-match'), null);
+  f.append(0);
+  f.append(1);
+  f.append(0);
+  hit = f.doc.querySelector('#output .lexicon-match');
+  assert.equal(hit.dataset.word, 'a');
+  assert.equal(hit.dataset.complete, 'true');
+  assert.equal(hit.classList.contains('pending-match'), false);
+  assert.match(f.doc.getElementById('lexicon-summary').textContent, /1 \/ 2 completed words/);
+  f.doc.getElementById('undo').click();
+  assert.equal(f.doc.querySelector('#output .lexicon-match').classList.contains('pending-match'), true);
+  f.append(0);
+  const before = f.doc.getElementById('output').textContent;
+  f.doc.getElementById('highlight-lexicon').checked = false;
+  f.doc.getElementById('highlight-lexicon').dispatchEvent(new f.dom.window.Event('change'));
+  assert.equal(f.doc.querySelector('#output .lexicon-match'), null);
+  assert.equal(f.doc.getElementById('output').textContent, before);
+  f.doc.getElementById('highlight-lexicon').checked = true;
+  f.doc.getElementById('highlight-lexicon').dispatchEvent(new f.dom.window.Event('change'));
+  f.choose('source', 'IT');
+  await settle();
+  f.append(1);
+  f.append(0);
+  assert.equal(f.doc.querySelector('#output .lexicon-match'), null);
+  assert.match(f.doc.getElementById('lexicon-summary').textContent, /0 \/ 1 completed words/);
   f.dom.window.close();
 });

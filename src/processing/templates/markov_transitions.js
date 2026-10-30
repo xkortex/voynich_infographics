@@ -9,6 +9,7 @@
     model = null,
     source = null,
     requestVersion = 0;
+  let lexicon = new Map();
   let history = [],
     choices = [];
   const fmt = value => Number(value).toLocaleString(undefined, {
@@ -267,6 +268,63 @@
     $('coverage').textContent = `Showing ${visible.length} of ${state.rows.length} observed successors${state.total?' · '+pct(mass/state.total)+' of next-unit probability shown':''}. Random draws use every successor.`;
   }
 
+  function renderOutput(state) {
+    const output = $('output');
+    output.replaceChildren();
+    let word = [],
+      completed = 0,
+      matches = 0,
+      pending = '';
+    const highlighting = $('highlight-lexicon').checked;
+
+    function unitSpan(id, index) {
+      const unit = model.alphabet[id];
+      const span = el('span', unit === ' ' && $('show-spaces').checked ? '␠' : unit);
+      if (index === history.length - 1) span.className = 'recent';
+      return span;
+    }
+
+    function flush(complete) {
+      if (!word.length) return;
+      const spelling = word.map(([id]) => model.alphabet[id]).join('');
+      const entry = lexicon.get(spelling);
+      const wrapper = el(highlighting && entry ? 'a' : 'span');
+      wrapper.className = 'generated-word';
+      wrapper.dataset.word = spelling;
+      wrapper.dataset.complete = String(complete);
+      if (complete) {
+        completed++;
+        if (entry) matches++;
+      } else if (entry) pending = spelling;
+      if (highlighting && entry) {
+        wrapper.classList.add('lexicon-match');
+        if (!complete) wrapper.classList.add('pending-match');
+        wrapper.href = 'https://www.voynichese.com/#/' + encodeURIComponent(entry.folio) + '/exa:' + encodeURIComponent(spelling);
+        wrapper.target = '_blank';
+        wrapper.rel = 'noopener';
+        wrapper.title = `${spelling} · ${fmt(entry.count)} occurrences in ${source.id} · ${entry.folio} · exact-spelling candidate${complete ? '' : ' · current word may continue'}`;
+      }
+      word.forEach(([id, index]) => wrapper.append(unitSpan(id, index)));
+      output.append(wrapper);
+      word = [];
+    }
+    history.forEach((id, index) => {
+      if (model.alphabet[id] === ' ') {
+        flush(true);
+        output.append(unitSpan(id, index));
+      } else word.push([id, index]);
+    });
+    flush(!state.total);
+    if (!history.length) {
+      const placeholder = el('span', 'Choose a first unit below or press Next.');
+      placeholder.className = 'placeholder';
+      output.append(placeholder);
+    }
+    $('lexicon-summary').textContent = highlighting ?
+      `${matches} / ${completed} completed words occur in the ${source.id} lexicon (${fmt(lexicon.size)} word types).${pending ? ' Current unfinished match: '+pending+'; dotted outline means it may continue.' : ''} Highlighted words link to a source-folio lookup.` :
+      'Lexicon highlighting off.';
+  }
+
   function render() {
     if (!model) return;
     const state = distribution();
@@ -276,17 +334,7 @@
     $('undo').disabled = !history.length;
     $('reset').disabled = !history.length;
     $('copy').disabled = !history.length;
-    $('output').replaceChildren();
-    if (!history.length) {
-      const placeholder = el('span', 'Choose a first unit below or press Next.');
-      placeholder.className = 'placeholder';
-      $('output').append(placeholder);
-    } else history.forEach((id, index) => {
-      const unit = model.alphabet[id],
-        span = el('span', unit === ' ' && $('show-spaces').checked ? '␠' : unit);
-      if (index === history.length - 1) span.className = 'recent';
-      $('output').append(span);
-    });
+    renderOutput(state);
     $('output').scrollTop = $('output').scrollHeight;
     $('generation-summary').textContent = `${history.length} appended units · ${history.filter(id=>model.alphabet[id]===' ').length} spaces · ${source.id} · ${$('order').value==='1'?'first':'second'} order · synthetic output.`;
     const last = choices.at(-1);
@@ -316,6 +364,7 @@
       requested = manifest.sources.find(item => item.id === $('source').value),
       mode = $('units').value;
     model = null;
+    lexicon = new Map();
     history = [];
     choices = [];
     ['next', 'undo', 'reset', 'copy'].forEach(id => $(id).disabled = true);
@@ -325,12 +374,17 @@
     $('last-choice').textContent = '';
     $('coverage').textContent = '';
     $('generation-summary').textContent = '';
+    $('lexicon-summary').textContent = '';
     $('status').textContent = 'Loading observed transition counts…';
     try {
-      const data = await json(requested.files[mode]);
+      const [data, vocabulary] = await Promise.all([json(requested.files[mode]), json(requested.lexicon)]);
       if (token !== requestVersion) return;
       model = data;
       source = requested;
+      lexicon = new Map(vocabulary.words.map(([word, count, folio]) => [word, {
+        count,
+        folio
+      }]));
       render();
     } catch (error) {
       if (token === requestVersion) $('status').textContent = error.message + '. Change a selection to retry.';
@@ -340,7 +394,7 @@
     [manifest, glyphs] = await Promise.all([json('manifest.json'), json('glyphs.json')]);
     $('source').replaceChildren(...manifest.sources.map(item => option(item.id, item.id + ' · ' + item.label)));
     ['source', 'units'].forEach(id => $(id).addEventListener('change', load));
-    ['order', 'limit', 'show-spaces'].forEach(id => $(id).addEventListener('change', () => {
+    ['order', 'limit', 'show-spaces', 'highlight-lexicon'].forEach(id => $(id).addEventListener('change', () => {
       if (model) render();
     }));
     $('next').addEventListener('click', next);
