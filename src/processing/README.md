@@ -108,3 +108,7 @@ EVA search reads the same per-folio JSON files, including folios not yet display
 ## Vowel-like symbol explorer
 
 [`vowel_discovery.py`](vowel_discovery.py) computes 44 controlled scenarios for exhaustive size-1–4 alternation search, Sukhotin contacts and a two-state HMM, with block-resampling sensitivity, neighbor matrices and linked examples. See [VOWEL_DISCOVERY.md](VOWEL_DISCOVERY.md) for exact fitting limits, seed orientation, controls, reference checks and interpretation. Class A/B assignments are not vowel identifications.
+
+## Character Markov explorer
+
+[`markov_transitions.py`](markov_transitions.py) builds first/second-order transition counts with spaces for four EVA transcriptions. The diagram supports manual choices, full-distribution random draws, Undo and Reset. See [MARKOV_TRANSITIONS.md](MARKOV_TRANSITIONS.md) for line/gap boundaries, starting distributions, strict dead ends and reproduction.

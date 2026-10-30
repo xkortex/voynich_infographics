@@ -11,6 +11,7 @@ from reading_text import install_gallery_entry
 from structural_statistics import install_structural_entry
 from word_frequencies import install_frequency_entry
 from vowel_discovery import install_vowel_entry
+from markov_transitions import install_markov_entry
 
 CHARTS = [
     (
@@ -144,6 +145,8 @@ def main():
         install_frequency_entry(site_dir)
     if (site_dir / "pages/vowel-discovery/index.html").exists():
         install_vowel_entry(site_dir)
+    if (site_dir / "pages/markov-transitions/index.html").exists():
+        install_markov_entry(site_dir)
     print("Site assembled with provenance:", site_dir)
 
 
